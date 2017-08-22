@@ -1,5 +1,9 @@
 # Software Language Engineering
 ## Definition
+> engineering of software languages and related artifacts
+
+alt:
+
 > engineering of languages related to software, and of their tools
 
 wow!
