@@ -1,6 +1,7 @@
 # Entry Template for C&P (Term goes here)
 ## Definition
-> (definition goes here)  
+> (definition goes here)
+
 (commentary, or link to other sources)
 ## Disambiguation
 (may not apply)
