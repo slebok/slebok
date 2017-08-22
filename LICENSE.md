@@ -1,4 +1,5 @@
-# [Attribution 4.0 International (CC BY 4.0)] (https://creativecommons.org/licenses/by/4.0/)
+# Attribution 4.0 International (CC BY 4.0)
+# https://creativecommons.org/licenses/by/4.0/
 
 This is a human-readable summary of (and not a substitute for) [the license](https://creativecommons.org/licenses/by/4.0/legalcode). This deed highlights only some of the key features and terms of the actual license. It is not a license and has no legal value. You should carefully review all of the terms and conditions of the actual license before using the licensed material.
 
