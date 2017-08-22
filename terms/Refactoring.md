@@ -20,4 +20,4 @@ Controlled Change > Refactoring
 
 *First Mention*
 
-Opdyke's PhD thesis, even though Griswold's PhD thesis addresses the same problem (without calling it refactoring)
+[Opdyke's PhD thesis](http://www.laputan.org/pub/papers/opdyke-thesis.pdf), even though [Griswold's PhD thesis](http://www.cs.ucsd.edu/users/wgg/Abstracts/gristhesis.ps.gz) addresses the same problem but calls it _restructuring_ instead of refactoring.
