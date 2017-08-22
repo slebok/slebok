@@ -1,10 +1,10 @@
-**Refactoring**
+# Refactoring
 
-*Definition*
+## Definition
 
-changing a program preserving its well-formedness and externally observable behaviour
+> changing a program preserving its well-formedness and externally observable behaviour
 
-*Disambiguation*
+## Disambiguation
 
 "refactoring" can refer to
 - a discipline (the refactoring track at a conference)
@@ -14,10 +14,10 @@ changing a program preserving its well-formedness and externally observable beha
 - a refactoring pattern (as catalogued, e.g., in Fowler's book)
 - an instance of such a pattern
 
-*Classification*
+## Classification
 
-Controlled Change > Refactoring
+[Controlled Change](ControlledChange.md) \> Refactoring
 
-*First Mention*
+## First Mention
 
 [Opdyke's PhD thesis](http://www.laputan.org/pub/papers/opdyke-thesis.pdf), even though [Griswold's PhD thesis](http://www.cs.ucsd.edu/users/wgg/Abstracts/gristhesis.ps.gz) addresses the same problem but calls it _restructuring_ instead of refactoring.
