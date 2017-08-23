@@ -1,4 +1,4 @@
-# Structure, Structure type
+# Structure type (Structure)
 
 ## Also known as / Related to
 [Record, Record type](Record, Record type)

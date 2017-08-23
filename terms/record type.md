@@ -1,4 +1,4 @@
-# Record, Record type
+# Record type (Record)
 
 ## Definition
 See [Structure, Structure type](Structure, Structure type).
