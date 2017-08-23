@@ -5,10 +5,7 @@ A tree representation of the syntactic structure of a sentence; similar to a [Pa
 
 ## Links
 
-
-[[Wikipedia](http://en.wikipedia.org/wiki/Abstract_syntax_tree)]
-
-## Tags
-Abstraction,Parsing,Syntax
-
-
+* this sameAs http://en.wikipedia.org/wiki/Abstract_syntax_tree
+* #Abstraction
+* #Parsing
+* #Syntax

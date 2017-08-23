@@ -5,10 +5,5 @@ A type which is defined only through an interface of operations used to manipula
 
 ## Links
 
-
-[[Wikipedia](http://en.wikipedia.org/wiki/Abstract_data_type)]
-
-## Tags
-Types
-
-
+* this sameAs http://en.wikipedia.org/wiki/Abstract_data_type
+* #Types
