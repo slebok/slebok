@@ -15,6 +15,7 @@ A formal notation for grammars, where productions are written ```<symbol> ::= <s
 
 ## Meta
 * this sameAs http://en.wikipedia.org/wiki/Backus-Naur_Form
+* this notA normal form
 * #Syntax
 
 
