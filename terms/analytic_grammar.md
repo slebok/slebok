@@ -1,14 +1,9 @@
 # Analytic grammar
 
 ## Definition
-A grammar which corresponds directly to the structure and semantics of a parser. For example, parser combinators and [parsing expression grammars](Parsing expression grammar) (PEGs).
+A grammar which corresponds directly to the structure and semantics of a parser. For example, parser combinators and parsing expression grammar (PEGs).
 
-## Links
-
-
-[[Wikipedia](http://en.wikipedia.org/wiki/Formal_grammar#Analytic_grammars)]
-
-## Tags
-Parsing,Syntax
-
-
+## Meta
+* this sameAs http://en.wikipedia.org/wiki/Formal_grammar#Analytic_grammars
+* #Parsing
+* #Syntax
