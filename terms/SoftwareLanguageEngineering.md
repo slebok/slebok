@@ -1,10 +1,10 @@
 # Software Language Engineering
 ## Definition
-> engineering of software languages and related artifacts
+> engineering of software languages and related artifacts [ON]
 
 alt:
 
-> engineering of languages related to software, and of their tools, using tools
+> engineering of languages related to software, and of their tools, using tools [FS]
 
 wow!
 ## Classification
