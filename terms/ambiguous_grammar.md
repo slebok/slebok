@@ -1,17 +1,11 @@
 # Ambiguous grammar
 
 ## Definition
-A grammar for which there is a string which has more than one leftmost [Derivation](Derivation).
-#### Parsing
-Requires a [Generalised parser](Generalised parser), produces a [Parse forest](Parse forest).
- 
+A grammar for which there is a string which has more than one leftmost derivation.
 
-## Links
+Parsing with it requires a generalised parser and produces a parse forest.
 
-
-[[Wikipedia](http://en.wikipedia.org/wiki/Ambiguous_grammar)]
-
-## Tags
-Ambiguity,Syntax
-
-
+## Meta
+* this sameAs http://en.wikipedia.org/wiki/Ambiguous_grammar
+* #Ambiguity
+* #Syntax
