@@ -16,11 +16,6 @@ A DSL defined as language-like interface to library.
  
 
 ## Links
-
-
-[[Wikipedia](http://en.wikipedia.org/wiki/Domain-specific_language)]
-
-## Tags
-Abstraction,Languages
-
-
+* this sameAs http://en.wikipedia.org/wiki/Domain-specific_language
+* #Abstraction
+* #Languages
