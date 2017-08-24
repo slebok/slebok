@@ -8,6 +8,8 @@
 
 ### Contribute to the SLEBoK
 
+++ slack
+
 ## Acknowledgement
 
 This SLEBoK has been initiated during the SLEBoK Dagstuhl Seminar
