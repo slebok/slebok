@@ -6,6 +6,11 @@ An attribute whose value is a reference to a node in the [abstract syntax tree](
 ## Classification
 [attribute grammar](attribute_grammar.md) \> [reference attribute grammar](reference_attribute_grammar.md) \> (this term)
 
+## Example uses
+* Name bindings
+* Inheritance graph
+* Call graph
+
 
 
 
