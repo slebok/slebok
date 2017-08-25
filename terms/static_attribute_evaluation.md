@@ -5,6 +5,8 @@ Uses an evaluation order computed ahead of evaluation time, based on the depende
 A widely used static algorithm is Kastens' algorithm for *ordered attribute grammars*. It represents the precomputed evaluation
 orders as, so called, *visit sequences*.
 
+Static algorithms typically detect unintended cyclic dependencies between attributes.
+
 ## Classification
 [attribute grammar](attribute_grammar.md) \> [attribute evaluation algorithm](attribute_evaluation_algorithm.md) \> (this term)
 
