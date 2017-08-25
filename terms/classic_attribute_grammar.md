@@ -9,4 +9,9 @@ An attribute grammar as defined by Knuth in his seminal paper from 1968. Include
 ## First mention
 See main entry about [attribute grammars](attribute_grammar.md)
 
+## Known tools
+* Lrc
+* LISA
+* Eli
+* UUAG family
 
