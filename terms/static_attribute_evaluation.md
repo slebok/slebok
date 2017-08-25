@@ -1,6 +1,6 @@
 # Static attribute evaluation algorithm
 ## Definition
-Uses an evaluation order computed ahead of evaluation time, based on the dependencies in the attribute grammar, approximating the dependencis between attribute instances in any [abstract syntax tree](abstract_syntax_tree.md). Is typically [exhaustive](exhaustive_attribute_evaluation.md).
+Uses an evaluation order computed ahead of evaluation time, based on the dependencies in the attribute grammar, approximating the dependencies between attribute instances in any [abstract syntax tree](abstract_syntax_tree.md). Is typically [exhaustive](exhaustive_attribute_evaluation.md).
 
 A widely used static algorithm is Kastens' algorithm for *ordered attribute grammars*. It represents the precomputed evaluation
 orders as, so called, *visit sequences*.
