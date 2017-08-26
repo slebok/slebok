@@ -1,7 +1,7 @@
-# Collection attributes
+# Collection attribute
 
 ## Definition
-An attribute that is defined by a combination of a set of "contributions" associated with nonterminals in the [AST](abstract_syntax_tree.md), i.e., a fold over information in the complete AST.
+An attribute that is defined by a combination of a set of *contributions* associated with nonterminals in the [AST](abstract_syntax_tree.md), i.e., a fold over selected information in the complete AST.
 
 ## Classification
 [attribute grammar](attribute_grammar.md) \> (this term)
