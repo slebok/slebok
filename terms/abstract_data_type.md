@@ -7,10 +7,10 @@ alt:
 
 > a [type](type.md) defined by the set of operations available for its [instances](instance.md) (or values), rather than by its representation (which remains hidden)
 
-##Classification
+## Classification
 language construct \> type \> abstract data type
 
-##First Mention
+## First Mention
 ?
 
 ## Links
