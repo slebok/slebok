@@ -12,8 +12,8 @@ LINGUIST-86: Yet Another Translator Writing System Based On Attribute Grammars. 
 
 ## Example uses
 * Intrinsic node properties like tokens
-* Abstract syntax graph (extending an AST spanning tree to a graph, using intrinsic reference attributes)
-* (Åkesson 2010) used intrinsic reference attributes to let a Modelica model instance point back to its model class.
+* Abstract syntax graph (extending an AST spanning tree to a graph, using intrinsic [reference attributes](reference_attribute.md))
+* (Åkesson 2010) used intrinsic [reference attributes](reference_attribute.md) to let a Modelica model instance reference its model class.
 
 ## Links
 * Johan Åkesson, Torbjörn Ekman, Görel Hedin:
