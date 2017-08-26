@@ -1,12 +1,14 @@
 # Higher-order attribute
 
 ## Also known as
-Non-terminal attribute (NTA)
+Nonterminal attribute (NTA)
 
 ## Definition
 An attribute whose value is a fresh [AST](abstract_syntax_tree.md) subtree.
 
-Allows new pieces of AST to be derived from the original AST. The node containing the higher-order attribute is regarded as the parent of the subtree. Is higher-order in that it can itself have attributes. In this case its inherited attributes should be defined by its parent node. Can be [synthesized](synthesized_attribute.md) or [inherited](inherited_attribute.md). 
+Allows new pieces of AST to be derived from the original AST, and extending it. The attribute is higher-order in that the new subtree can itself have attributes. In this case the inherited attributes of the subtree root should be defined by the node (nonterminal) declaring the higher-order attribute. This node acts as the parent of the new subtree.
+
+The commonly used synonym *nonterminal attribute* indicates that the higher-order attribute is both an attribute and a nonterminal.
 
 ## Classification
 [attribute grammar](attribute_grammar.md) \> (this term)
