@@ -3,9 +3,9 @@
 ## Definition
 An extension of [context-free grammars](context-free_grammar.md) with derived properties ("attributes") of the [nonterminals](nonterminal_symbol.md). The derived property values are defined using directed equations known as [semantic functions](semantic_function.md), associated with the [productions](production_rule.md).
 
-Can be used to automatically compute static properties of [abstract syntax tree](abstract_syntax_tree.md) nodes. [Classic attribute grammars](classic_attribute_grammar.md) support tree-based computations. [Reference attribute grammars](reference_attribute_grammar.md) additionally support graph-based computations.
+Can be used to automatically compute static properties of [AST](abstract_syntax_tree.md) nodes. [Classic attribute grammars](classic_attribute_grammar.md) support tree-based computations. [Reference attribute grammars](reference_attribute_grammar.md) additionally support graph-based computations.
 
-Attribute kinds include [synthesized](synthesized_attribute.md), [inherited](inherited_attribute.md), [higher-order](higher-order_attribute.md), [circular](circular_attribute.md), [collection](collection_attribute.md), [reference](reference_attribute.md), and [parameterized](parameterized_attribute.md) attributes. Additional mechanisms include [forwarding](attribute_forwarding.md) and [attribute-conditional rewrites](attribute_conditional_rewrite.md).
+Attribute kinds include [synthesized](synthesized_attribute.md), [inherited](inherited_attribute.md), [higher-order](higher-order_attribute.md), [circular](circular_attribute.md), [collection](collection_attribute.md), [reference](reference_attribute.md), and [parameterized](parameterized_attribute.md) attributes. Additional mechanisms include [forwarding](attribute_forwarding.md) and [attribute-conditional rewrites](attribute_conditional_rewrite.md) which both support [AST](abstract_syntax_tree.md) transformations to a certain extent.
 
 Different [attribute evaluation algorithms](attribute_evaluation_algorithm.md) can be used to automatically compute the attribute values.
 
