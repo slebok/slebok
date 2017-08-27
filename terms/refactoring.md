@@ -10,7 +10,7 @@
 - a discipline (the refactoring track at a conference)
 - an activity (someone is refactoring code)
 - the result of such an activity (one program is a refactoring of another)
-- a programming tool aiding in such an activity (in disciplined writing referred to as "refactoring tool")
+- a programming tool aiding in such an activity (in disciplined writing referred to as "[refactoring tool](refactoring_tool.md)")
 - a refactoring pattern (as catalogued, e.g., in Fowler's book)
 - an instance of such a pattern
 
