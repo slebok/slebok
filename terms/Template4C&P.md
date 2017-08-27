@@ -9,5 +9,7 @@
 [superterm](file.md) \> [superterm](file.md) \> (this term)
 ## First Mention
 (some DBLP references here, or references into BibSLEIGH)
+## Sugested Reading
+(recommended primer, survey, ...)
 ## Known Instances
 (list of known instances here; may not apply)
