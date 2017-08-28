@@ -4,7 +4,7 @@
 
 alt:
 
-> engineering of formal languages and their tools, as software [FS] (wow!)
+> [engineering](engineering.md) of formal languages and their tools, as software [FS] (wow!)
 ## Classification
 Discipline \> Software Language Engineering
 ## First Mention
