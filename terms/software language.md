@@ -2,7 +2,7 @@
 ## Definition
 > any artificially created [language](language.md) used in software engineering, whose syntax or semantics is constrained by a computer program
 
-> subject of [software language engineering](software%20language%20engineering.md)
+> subject (or, rather, object) of [software language engineering](software%20language%20engineering.md)
 
 (the latter defining it as a role, as discussed as Dagstuhl (FS))
 
