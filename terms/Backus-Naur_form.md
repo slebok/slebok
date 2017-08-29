@@ -11,7 +11,7 @@ A formal notation for grammars, where productions are written `<symbol> ::= <sym
 * EBNF, or Extended BNF
 	* https://doi.org/10.1145/359863.359883
 * (E)BNF as a family of metalanguages/dialects
-	* http://bibtex.github.io/SAC-2012-Zaytsev.html
+	* http://dx.doi.org/10.1145/2245276.2232090
 
 ## Meta
 * this sameAs http://en.wikipedia.org/wiki/Backus-Naur_Form
