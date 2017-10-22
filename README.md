@@ -9,7 +9,7 @@ The _Software Language Engineering Body of Knowledge_ (SLEBoK) is a wide communi
 
 The SLEBoK has been initiated during the [SLEBoK Dagstuhl Seminar](http://www.dagstuhl.de/about-dagstuhl/searchbox/?catchword=17342) in August, 2017, exactly one decade after the advent of SLE as a scientific field (we refer here to the first edition of the SLE conference in 2008, Toulouse, France). The SLEBoK is expected to continuously involve, reflecting an up-to-date view on SLE. 
 
-Should you need further information regarding SLEBoK, feel free to contact the Editor-in-Chief (EiC) or the relevant section editor. The current EiC is Dr. Vadim Zaytsev (@grammarware).
+Should you need further information regarding SLEBoK, feel free to contact the Editor-in-Chief (EiC). The current SLEBoK EiC is Dr. Vadim Zaytsev (@grammarware).
 
 ## Howto
 
