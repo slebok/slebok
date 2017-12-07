@@ -1,9 +1,12 @@
 # Attribute forwarding
 
 ## Definition
-A technique allowing an access to an attribute to be delegated (*forwarded*) to a another "sematncially equivalent" [AST](abstract_syntax_tree.md) that is constructed as a designated [higher-order attribute](higher-order_attribute.md).
+A technique allowing an access to an attribute to be delegated (*forwarded*) to a another "semantically equivalent" [AST](abstract_syntax_tree.md) that is constructed as a designated [higher-order attribute](higher-order_attribute.md).
 
-Forwarding supports [desugaring](desugaring.md) AST transformations in a modular way. When a language construct *New* is introduced, a higher-order attribute can be added in *New* that is defined as the desugared version of *New*, using existing language constructs, say *Old*. Through forwarding from *New* to *Old*, client accesses of attributes without a defining equation on *New* are delegated to corresponding attributes in *Old*. This allows reuse of existing attribute definitions in *Old*, for example for code generation. Explicit equations for other attributes are allowed and these take precedence over the values on the forwarded-to tree, that is on *Old*.  This is useful to define attributes for, for example, type checking and errors, so that static errors can given using the code the programmer wrote (*New*) and not is desugaring (*Old*).
+Forwarding supports [desugaring](desugaring.md) AST transformations in a modular way. When a language construct *New* is introduced, a higher-order attribute can be added in *New* that is defined as the desugared version of *New*, using existing language constructs, say *Old*. Through forwarding from *New* to *Old*, client accesses of attributes without a defining equation on *New* are delegated to corresponding attributes in *Old*. This allows reuse of existing attribute definitions in *Old*, for example for code generation. Explicit equations for other attributes are allowed and these take precedence over the values on the forwarded-to tree, that is on *Old*.  This is useful to define attributes for, for example, type checking and error messages, so that static errors can given using the code the programmer wrote (*New*) and not its desugaring (*Old*).
+
+Forwarding supports the modular specification of language extensions. One extension can add a new construct that forwards to old constructs in a host language.  A second extension can add a new semantic analysis as attributes and equations defined over the host language grammar.  These independently-developed extensions then work together as the new analysis, when applied to the new constructs in the first extension, are carried on their translation to the host language.
+
 
 ## Classification
 [attribute grammar](attribute_grammar.md) \> (this term)
