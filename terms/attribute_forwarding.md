@@ -9,6 +9,8 @@ Forwarding supports [desugaring](desugaring.md) AST transformations in a modular
 [attribute grammar](attribute_grammar.md) \> (this term)
 
 ## First mention
+Forwarding was part of the Intentional Programming project at Microsoft Research.  It was incorported into attribute grammars in 2002.
+
 Eric Van Wyk, Oege de Moor, Kevin Backhouse, Paul Kwiatkowski:
 Forwarding in Attribute Grammars for Modular Language Design. CC 2002: 128-142
 https://doi.org/10.1007/3-540-45937-5_11
