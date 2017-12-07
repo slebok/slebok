@@ -33,7 +33,7 @@ original specification of attribute grammars.  These include:
 Silver also has a modular analysis that can be used in extensible
 languages to ensure that the composition of independently developed
 language extensions (that all pass this analysis) compose to form a
-*well-defined* attrbribute grammar.
+*well-defined* attribute grammar.
 
 Silver comes bundled with [Copper](Copper.md), a parser and
 context-aware scanner generator.
@@ -46,7 +46,7 @@ grammar Arithmetic;
 nonterminal Expr with value, unparse, env;
 
 synthesized attribute value :: Integer;
-syntehsized attribute unparse :: String;
+synthesized attribute unparse :: String;
 inherited attribute env :: [ Pair<String Integer> ];
 
 abstract production add
