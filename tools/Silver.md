@@ -116,57 +116,57 @@ Three uses of Silver (and Copper) of interest are
    Silver: an extensible attribute grammar system.
    *Science of Computer Programming*.
    75 (1-2): 39-54, January, 2010.
-   [[Author pre-print] http://www-users.cs.umn.edu/~evw/pubs/vanwyk10scp/].
-   [[Publisher verion] https://doi.org/10.1016/j.scico.2009.07.004]
+   [[Author pre-print]](http://www-users.cs.umn.edu/~evw/pubs/vanwyk10scp/).
+   [[Publisher version]](https://doi.org/10.1016/j.scico.2009.07.004).
 
 2. Eric Van Wyk, Oege de Moor, Kevin Backhouse, and Paul Kwiatkowski.
    Forwarding in Attribute Grammars for Modular Language Design.
    *Proceedings of 11th Conference on Compiler Construction* (CC 2002),
    LNCS, vol. 2304, pp. 128-142, Springer Verlag, 2002. 
-   [[Author pre-print] http://www-users.cs.umn.edu/~evw/pubs/vanwyk02cc/].
-   [[Publisher verion] https://doi.org/10.1007/3-540-45937-5_11 ]
+   [[Author pre-print]](http://www-users.cs.umn.edu/~evw/pubs/vanwyk02cc/).
+   [[Publisher version]](https://doi.org/10.1007/3-540-45937-5_11).
 
 3. Ted Kaminski and Eric Van Wyk.
    Integrating attribute grammar and functional programming language features.
    *Proceedings of 4th the International Conference on Software Language
    Engineering* (SLE 2011), LNCS, vol. 6940, pp. 263--282, Springer
    Verlag, 2011.  
-   [[Author pre-print] http://www-users.cs.umn.edu/~evw/pubs/kaminski11sle/].
-   [[Publisher verion] https://doi.org/10.1007/978-3-642-28830-2_15 ]
+   [[Author pre-print]]( http://www-users.cs.umn.edu/~evw/pubs/kaminski11sle/).
+   [[Publisher version]](https://doi.org/10.1007/978-3-642-28830-2_15).
 
 4. Ted Kaminski and Eric Van Wyk.
    Modular well-definedness analysis for attribute grammars.
    *Proceedings of 5th the International Conference on Software
    Language Engineerin*g (SLE 2012), LNCS, vol. 7745, pp. 352--371,
    Springer Verlag, 2012.  
-   [[Author pre-print] http://www-users.cs.umn.edu/~evw/pubs/kaminski12sle/].
-   [[Publisher verion] https://doi.org/10.1007/978-3-642-36089-3_20]
+   [[Author pre-print]]( http://www-users.cs.umn.edu/~evw/pubs/kaminski12sle/).
+   [[Publisher version]](https://doi.org/10.1007/978-3-642-36089-3_20).
 
 5. Ted Kaminski. 
    Reliably composable language extensions. 
    Ph.D. Dissertation, Department of Computer Science and Engineering,
    University of Minnesota, Minneapolis, Minnesota, USA. July, 2017. 
-   [[Archived version] http://hdl.handle.net/11299/188954].
+   [[Archived version]](http://hdl.handle.net/11299/188954).
 
 6. Ted Kaminski, Lucas Kramer, Travis Carlson, and Eric Van Wyk.
    Reliable and Automatic Composition of Language Extensions to C: The
    ableC Extensible Language Framework. 
    *Proceedings of ACM Programming Languages* 1, OOPSLA, Article 98
    (October 2017), 29 pages.  
-   [[Author pre-print] http://www-users.cs.umn.edu/~evw/pubs/kaminski17oopsla/index.html].
-   [[Publisher verion] https://doi.org/10.1145/3136040.3136055]
+   [[Author pre-print]]( http://www-users.cs.umn.edu/~evw/pubs/kaminski17oopsla/index.html).
+   [[Publisher version]](https://doi.org/10.1145/3136040.3136055).
 
 7. Ted Kaminski and Eric Van Wyk.
    A Modular Specification of Oberon0 Using the Silver Attribute
    Grammar System. 
    *Science of Computer Programming*.
    114 (C): 29--40, November, 2015.
-   [[Author pre-print] http://www-users.cs.umn.edu/~evw/pubs/kaminski15scp/].
-   [[Publisher verion] https://doi.org/10.1145/3138224]
+   [[Author pre-print]](http://www-users.cs.umn.edu/~evw/pubs/kaminski15scp/).
+   [[Publisher version]](https://doi.org/10.1145/3138224).
 
 8. Srinivas Rangarajan, Ted Kaminski, Eric Van Wyk, Aditya Bhan, and
    Prodromos Daoutidis. 
    Language-oriented rule-based reaction network generation and analysis:
    Algorithms of RING
    *Computers and Chemical Engineering* 96 : 124--137, May, 2014.
-   [[Publisher verion] https://doi.org/10.1016/j.compchemeng.2014.02.007]
+   [[Publisher version]](https://doi.org/10.1016/j.compchemeng.2014.02.007).
