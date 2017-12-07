@@ -20,7 +20,7 @@ original specification of attribute grammars.  These include:
 
 * *Higher-order attributes* as defined by Vogt and a form of
   *reference attributes* that are similar in spirit to those in 
-  [[JastAdd] http://jastadd.org/web/].
+  [[JastAdd]](http://jastadd.org/web/).
 
 * *Collection attributes* a simplified version of those specified by
   Boyland are also supported in Silver. 
