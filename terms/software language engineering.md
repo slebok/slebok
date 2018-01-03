@@ -5,6 +5,10 @@
 alt:
 
 > [engineering](engineering.md) of formal languages and their tools, as software [FS] (wow!)
+
+alt:
+
+discipline of [engineering](engineering.md) formal languages and their tools required for the creation of software [FS]
 ## Classification
 Discipline \> Software Language Engineering
 ## First Mention
