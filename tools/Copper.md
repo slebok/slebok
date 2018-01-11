@@ -11,7 +11,29 @@ Copper is a parser and scanner generator that generates integrated LR parsers an
 
     TODO
 
+## Applications
+
+Two primiary uses of Copper (and Silver) of interest are
+
+1. The largest Silver specification is [ableC](http://melt.cs.umn.edu/ableC/),
+   an extensible specification of C at the C11 standard.  Several
+   modular language extensions to this have also been written.  
+
+2. The Oberon0 specification that was part of the LDTA 2011 Tool
+   Challenge.
+   
 ## Key sources
 
-- http://www-users.cs.umn.edu/~evw/pubs/vanwyk07gpce/
-- http://www-users.cs.umn.edu/~evw/pubs/schwerdfeger09pldi/
+- Eric Van Wyk and August Schwerdfeger.
+  Context-Aware Scanning for Parsing Extensible Languages.
+  *Proceedings of International Conference on Generative Programming and Component Engineering, (GPCE 2007)*,
+  pp. 63-72. ACM Press, 2007. 
+  [[Author pre-print]](http://www-users.cs.umn.edu/~evw/pubs/vanwyk07gpce/).
+  [[DOI]](https://doi.org/10.1145/1289971.1289983)
+  
+- August Schwerdfeger and Eric Van Wyk.
+  Verifiable Composition of Deterministic Grammars.
+  *Proceedings of ACM SIGPLAN Conference on Programming Language Design and Implementation (PLDI 2009)*,
+  pp. 199-210, ACM Press, 2009. 
+  [[Author pre-print]](http://www-users.cs.umn.edu/~evw/pubs/schwerdfeger09pldi/).
+  [[DOI]](https://doi.org/10.1145/1542476.1542499)
