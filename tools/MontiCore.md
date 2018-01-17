@@ -11,8 +11,9 @@ MontiCore is a full-fledged, open-source, language workbench for the design and 
 
 
 ## Example
-
-    TODO
+```
+grammar
+```
 
 ## Key sources
 * Pedram Mir Seyed Nazari:MontiCore: Efficient Development of Composed Modeling Language Essentials. In: Shaker Verlag, ISBN 978-3-8440-5320-3. Aachener Informatik-Berichte, Software Engineering, Band 29. 2017. [PDF](http://www.se-rwth.de/phdtheses/Diss-Nazari-MontiCore-Efficient-Development-of-Composed-Modeling-Language-Essentials.pdf)
