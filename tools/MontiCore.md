@@ -132,7 +132,7 @@ class ${ast.getName()} {
    * Enum over states that supports retrieving states by name.
    */
   enum State {
-    <#for ASTState s : ast.states> s("s")<#sep>, </#for>
+    <#list ast.states as s> s("s")<#sep>, </#list>
     
     private String name;
     
@@ -151,10 +151,10 @@ class ${ast.getName()} {
   private List<State> finalStates = new ArrayList<State>();
   
   public ${ast.getName()}() {
-    <#for ASTState s : ast.states>
+    <#list ast.states as s>
       <#if s.initial> this.initialStates.add(State.${s.name}); </#if>
       <#if s.r__final> this.finalStates.add(State.${s.name}); </#if>
-    </#for>
+    </#list>
   }
   
   private int random(int max) { return ThreadLocalRandom.current().nextInt(0, max); }
@@ -167,26 +167,26 @@ class ${ast.getName()} {
     int r = return(${s.transitions.size()});
     <#assign i = 0/>
     switch (r) {
-    <#for ASTTransition t : s.transitions>
+    <#list s.transitions as t>
       case ${i}: return State.fromName(${t.to});
       <#assign i =i+1/>
-    </#for>
+    </#list>
       case default: return null;
     }
   }
   
   // Executes automaton until a final state is reached
   public void exec() {
-    <#for ASTState s : ast.states>
-      <#for ASTTransition t : s.transitions>
+    <#list ast.states as s>
+      <#list s.transitions as t>
         if (this.current.equals(State.${s.name})) {
           int r = random(${s.transitions.size()});
           this.current = getRandomSuccessorState(State.${s.name});  
           System.out.println("Entering state '" + this.current.toString() + "'.");
           if (this.isFinal(this.current)) { return; }
         }
-      </#for>
-    </#for>
+      </#list>
+    </#list>
   }
 ```
 
