@@ -125,7 +125,72 @@ public class UniqueStateNames implements AutomatonASTAutomatonCoCo {
 Once a model has been checked, it can be processed further. This may include template-based code generation into executable GPL code, such as depicted below:
 
 ```
-Template
+class ${ast.getName()} {
+  enum State {
+    <for state s : ast.states>
+    s("s"),
+    </for>
+    public static State getRandom() {
+      
+      for (State s : State.values()) {
+        if (s.text.equalsIgnoreCase(name)) {
+          return s;
+        }
+      }
+      return null;
+    }
+  }
+  
+  private State current = selectInitialState();
+  private List<State> initialStates = new ArrayList<State>(); 
+  private List<State> finalStates = new ArrayList<State>();
+  
+  public ${ast.getName()}() {
+    <for ASTState s : ast.states>
+      <if s.initial>
+        this.initialStates.add(s);
+      </if>
+      <if s.r__final>
+        this.finalStates.add(s);
+      </if>
+    </for>
+  }
+  
+  private State selectRandomInitialState() {
+    int r = java.util.concurrent.ThreadLocalRandom.current().nextInt(0, initialStates.size());
+    return this.initialStates(r);
+  }
+  
+  private boolean isFinal(State s) {
+    return this.finalStates.contains(s);
+  }
+  
+  private State getRandomSuccessorState(State s) {
+  int r = java.util.concurrent.ThreadLocalRandom.current().nextInt(0, ${s.transitions.size()})
+  <assign i = 0/>
+  <for ASTTransition t : s.transitions>
+    switch (r) {
+      case ${i}: return State.fromName(${t.to});
+      case default: return null;
+    }
+  </for>
+  }
+  
+  public void exec() {
+    <for state s : ast.states>
+      <for transition t : s.transitions>
+        if (this.current.equals(s)) {
+          int r = java.util.concurrent.ThreadLocalRandom.current().nextInt(0, ${s.transitions.size()});
+          this.current = getRandomSuccessorState(s);  
+          System.out.println("Entering state '" + this.current.toString() + "'.");
+          if (this.current.r__final) { 
+            return;
+          }
+        }
+      </for>
+    </for>
+  }
+  </for>
 ```
 
 ## Key sources
