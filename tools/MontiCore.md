@@ -22,8 +22,7 @@ grammar Automaton extends de.monticore.lexicals.Lexicals {
     @attribute states List of states
     @attribute transitions List of transitions
 */
-symbol scope Automaton =
-  "automaton" Name "{" (State | Transition)* "}" ;
+symbol scope Automaton = "automaton" Name "{" (State | Transition)* "}" ;
 
 /** A ASTState represents a state of a finite automaton
     @attribute name Name of state
@@ -31,10 +30,7 @@ symbol scope Automaton =
     @attribute final True if state is a final state
     @attribute transitions List of transitions
 */
-symbol scope State =
-  "state" Name
-  (("<<" ["initial"] ">>" ) | ("<<" ["final"] ">>" ))*
-  ( ("{" Transition* "}") | ";") ;
+symbol scope State = "state" Name (("<<" ["initial"] ">>" ) | ("<<" ["final"] ">>" ))* ( ("{" Transition* "}") | ";") ;
 
 /** A ASTTransition represents a transition
     @attribute from Name of the state from which the transitions starts
