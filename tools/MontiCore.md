@@ -122,7 +122,7 @@ public class UniqueStateNames implements AutomatonASTAutomatonCoCo {
 }
 ```
 
-Once a model has been checked, it can be processed further. This may include template-based code generation into executable GPL code, such as depicted below:
+Once a model has been checked, it can be processed further. This may include template-based code generation into executable GPL code, such as depicted below, where `${...}` and `<#>...</#>` delimit FreeMarker commands and `ast` contains the currently processed model.
 
 ```
 import java.util.concurrent.ThreadLocalRandom;
