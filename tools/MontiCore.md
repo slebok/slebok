@@ -17,27 +17,28 @@ At the core of each MontiCore language is a context-free grammar that defines ab
 ```
 grammar Automaton extends de.monticore.lexicals.Lexicals {
 
-/** A ASTAutomaton represents a finite automaton
-    @attribute name Name of the automaton
-    @attribute states List of states
-    @attribute transitions List of transitions
-*/
-symbol scope Automaton = "automaton" Name "{" (State | Transition)* "}" ;
+  /** A ASTAutomaton represents a finite automaton
+      @attribute name Name of the automaton
+      @attribute states List of states
+      @attribute transitions List of transitions
+  */
+  symbol scope Automaton = "automaton" Name "{" (State | Transition)* "}" ;
 
-/** A ASTState represents a state of a finite automaton
-    @attribute name Name of state
-    @attribute initial True if state is initial state
-    @attribute final True if state is a final state
-    @attribute transitions List of transitions
-*/
-symbol scope State = "state" Name (("<<" ["initial"] ">>" ) | ("<<" ["final"] ">>" ))* ( ("{" Transition* "}") | ";") ;
+  /** A ASTState represents a state of a finite automaton
+      @attribute name Name of state
+      @attribute initial True if state is initial state
+      @attribute final True if state is a final state
+      @attribute transitions List of transitions
+  */
+  symbol scope State = 
+    "state" Name (("<<" ["initial"] ">>" ) | ("<<" ["final"] ">>" ))* ( ("{" Transition* "}") | ";") ;
 
-/** A ASTTransition represents a transition
-    @attribute from Name of the state from which the transitions starts
-    @attribute input Activation signal for this transition
-    @attribute to Name of the state to which the transitions goes
-*/ 
-Transition =  from:Name "-" input:Name ">" to:Name ";" ;
+  /** A ASTTransition represents a transition
+      @attribute from Name of the state from which the transitions starts
+      @attribute input Activation signal for this transition
+      @attribute to Name of the state to which the transitions goes
+  */ 
+  Transition =  from:Name "-" input:Name ">" to:Name ";" ;
 }
 ```
 
