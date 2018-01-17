@@ -177,16 +177,16 @@ class ${ast.getName()} {
   
   // Executes automaton until a final state is reached
   public void exec() {
+    while (!this.isFinal(this.current)) {
     <#list ast.states as s>
       <#list s.transitions as t>
         if (this.current.equals(State.${s.name})) {
-          int r = random(${s.transitions.size()});
           this.current = getRandomSuccessorState(State.${s.name});  
           System.out.println("Entering state '" + this.current.toString() + "'.");
-          if (this.isFinal(this.current)) { return; }
         }
       </#list>
     </#list>
+    }
   }
 ```
 
