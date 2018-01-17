@@ -125,17 +125,19 @@ public class UniqueStateNames implements AutomatonASTAutomatonCoCo {
 Once a model has been checked, it can be processed further. This may include template-based code generation into executable GPL code, such as depicted below:
 
 ```
+import java.util.concurrent.ThreadLocalRandom;
+
 class ${ast.getName()} {
   enum State {
-    <for state s : ast.states>
-    s("s"),
-    </for>
-    public static State getRandom() {
-      
+    <#for state s : ast.states> s("s")<#sep>, </#for>
+    
+    private String name;
+    
+    public State(String name) { this.name = name; }
+    
+    public static State fromName(String name) {  
       for (State s : State.values()) {
-        if (s.text.equalsIgnoreCase(name)) {
-          return s;
-        }
+        if (s.name.equalsIgnoreCase(name)) { return s; }
       }
       return null;
     }
@@ -146,18 +148,14 @@ class ${ast.getName()} {
   private List<State> finalStates = new ArrayList<State>();
   
   public ${ast.getName()}() {
-    <for ASTState s : ast.states>
-      <if s.initial>
-        this.initialStates.add(s);
-      </if>
-      <if s.r__final>
-        this.finalStates.add(s);
-      </if>
-    </for>
+    <#for ASTState s : ast.states>
+      <#if s.initial> this.initialStates.add(s); </#if>
+      <#if s.r__final> this.finalStates.add(s); </#if>
+    </#for>
   }
   
   private State selectRandomInitialState() {
-    int r = java.util.concurrent.ThreadLocalRandom.current().nextInt(0, initialStates.size());
+    int r = ThreadLocalRandom.current().nextInt(0, initialStates.size());
     return this.initialStates(r);
   }
   
@@ -165,32 +163,33 @@ class ${ast.getName()} {
     return this.finalStates.contains(s);
   }
   
-  private State getRandomSuccessorState(State s) {
-  int r = java.util.concurrent.ThreadLocalRandom.current().nextInt(0, ${s.transitions.size()})
-  <assign i = 0/>
-  <for ASTTransition t : s.transitions>
+  private State selectRandomSuccessorState(State s) {
+    int r = ThreadLocalRandom.current().nextInt(0, ${s.transitions.size()})
+    <#assign i = 0/>
     switch (r) {
+    <#for ASTTransition t : s.transitions>
       case ${i}: return State.fromName(${t.to});
+      <#assign i =i+10/>
+    </#for>
       case default: return null;
     }
-  </for>
   }
   
+  // Executes automaton until a final state is reached
   public void exec() {
-    <for state s : ast.states>
-      <for transition t : s.transitions>
+    <#for state s : ast.states>
+      <#for transition t : s.transitions>
         if (this.current.equals(s)) {
           int r = java.util.concurrent.ThreadLocalRandom.current().nextInt(0, ${s.transitions.size()});
           this.current = getRandomSuccessorState(s);  
           System.out.println("Entering state '" + this.current.toString() + "'.");
-          if (this.current.r__final) { 
+          if (this.isFinal(this.current)) { 
             return;
           }
         }
-      </for>
-    </for>
+      </#for>
+    </#for>
   }
-  </for>
 ```
 
 ## Key sources
