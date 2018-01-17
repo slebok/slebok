@@ -28,13 +28,12 @@ symbol scope Automaton =
     @attribute name Name of state
     @attribute initial True if state is initial state
     @attribute final True if state is a final state
-    @attribute states List of sub states
     @attribute transitions List of transitions
 */
 symbol scope State =
   "state" Name
   (("<<" ["initial"] ">>" ) | ("<<" ["final"] ">>" ))*
-  ( ("{" (State | Transition)* "}") | ";") ;
+  ( ("{" Transition* "}") | ";") ;
 
 /** A ASTTransition represents a transition
     @attribute from Name of the state from which the transitions starts
