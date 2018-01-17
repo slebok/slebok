@@ -128,8 +128,11 @@ Once a model has been checked, it can be processed further. This may include tem
 import java.util.concurrent.ThreadLocalRandom;
 
 class ${ast.getName()} {
+  /**
+   * Enum over states that supports retrieving states by name.
+   */
   enum State {
-    <#for state s : ast.states> s("s")<#sep>, </#for>
+    <#for ASTState s : ast.states> s("s")<#sep>, </#for>
     
     private String name;
     
@@ -149,27 +152,24 @@ class ${ast.getName()} {
   
   public ${ast.getName()}() {
     <#for ASTState s : ast.states>
-      <#if s.initial> this.initialStates.add(s); </#if>
-      <#if s.r__final> this.finalStates.add(s); </#if>
+      <#if s.initial> this.initialStates.add(State.${s.name}); </#if>
+      <#if s.r__final> this.finalStates.add(State.${s.name}); </#if>
     </#for>
   }
   
-  private State selectRandomInitialState() {
-    int r = ThreadLocalRandom.current().nextInt(0, initialStates.size());
-    return this.initialStates(r);
-  }
+  private int random(int max) { return ThreadLocalRandom.current().nextInt(0, max); }
   
-  private boolean isFinal(State s) {
-    return this.finalStates.contains(s);
-  }
+  private State selectRandomInitialState() { return this.initialStates(return(initialStates.size())); }
+  
+  private boolean isFinal(State s) { return this.finalStates.contains(s); }
   
   private State selectRandomSuccessorState(State s) {
-    int r = ThreadLocalRandom.current().nextInt(0, ${s.transitions.size()})
+    int r = return(${s.transitions.size()});
     <#assign i = 0/>
     switch (r) {
     <#for ASTTransition t : s.transitions>
       case ${i}: return State.fromName(${t.to});
-      <#assign i =i+10/>
+      <#assign i =i+1/>
     </#for>
       case default: return null;
     }
@@ -177,15 +177,13 @@ class ${ast.getName()} {
   
   // Executes automaton until a final state is reached
   public void exec() {
-    <#for state s : ast.states>
-      <#for transition t : s.transitions>
-        if (this.current.equals(s)) {
-          int r = java.util.concurrent.ThreadLocalRandom.current().nextInt(0, ${s.transitions.size()});
-          this.current = getRandomSuccessorState(s);  
+    <#for ASTState s : ast.states>
+      <#for ASTTransition t : s.transitions>
+        if (this.current.equals(State.${s.name})) {
+          int r = random(${s.transitions.size()});
+          this.current = getRandomSuccessorState(State.${s.name});  
           System.out.println("Entering state '" + this.current.toString() + "'.");
-          if (this.isFinal(this.current)) { 
-            return;
-          }
+          if (this.isFinal(this.current)) { return; }
         }
       </#for>
     </#for>
