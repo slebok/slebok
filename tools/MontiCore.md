@@ -2,8 +2,8 @@
 
 ## Links
 * MontiCore website: http://www.monticore.de/, incl. 
-..* various [MontiCore languages](http://www.monticore.de/languages/) and 
-..* a [Getting Started](http://www.monticore.de/gettingstarted/) tutorial.
+  * various [MontiCore languages](http://www.monticore.de/languages/) and 
+  * a [Getting Started](http://www.monticore.de/gettingstarted/) tutorial.
 * MontiCore project: https://github.com/MontiCore/monticore
 
 ## Description
