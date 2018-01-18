@@ -191,7 +191,7 @@ class ${ast.getName()} {
           } // end if
         </#list>
       </#list>
-        if (this.nextState == null) { // no read until end, but no further transitions
+        if (this.nextState == null) { // not read until end, but no further transitions
           return false;
         }
         else {
@@ -199,6 +199,7 @@ class ${ast.getName()} {
         }
       } // end for
       
+      // read the complete input, let's see whether reached state is final
       return this.isFinal(this.currentState));
     }
   }
