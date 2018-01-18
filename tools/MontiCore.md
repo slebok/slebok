@@ -18,26 +18,26 @@ At the core of each MontiCore language is a context-free grammar that defines ab
 grammar Automaton extends de.monticore.lexicals.Lexicals {
 
   /** A ASTAutomaton represents a finite automaton
-      @attribute name Name of the automaton
-      @attribute states List of states
-      @attribute transitions List of transitions
-  */
+   * @attribute name Name of the automaton
+   * @attribute states List of states
+   * @attribute transitions List of transitions
+   */
   symbol scope Automaton = "automaton" Name "{" (State | Transition)* "}" ;
 
   /** A ASTState represents a state of a finite automaton
-      @attribute name Name of state
-      @attribute initial True if state is initial state
-      @attribute final True if state is a final state
-      @attribute transitions List of transitions
-  */
+   * @attribute name Name of state
+   * @attribute initial True if state is initial state
+   * @attribute final True if state is a final state
+   * @attribute transitions List of transitions
+   */
   symbol scope State = 
     "state" Name (("<<" ["initial"] ">>" ) | ("<<" ["final"] ">>" ))* ( ("{" Transition* "}") | ";") ;
 
   /** A ASTTransition represents a transition
-      @attribute from Name of the state from which the transitions starts
-      @attribute input Activation signal for this transition
-      @attribute to Name of the state to which the transitions goes
-  */ 
+   * @attribute from Name of the state from which the transitions starts
+   * @attribute input Activation signal for this transition
+   * @attribute to Name of the state to which the transitions goes
+   */ 
   Transition =  from:Name "-" input:Name ">" to:Name ";" ;
 }
 ```
@@ -173,17 +173,33 @@ class ${ast.getName()} {
     }
   }
   
-  // Executes automaton until a final state is reached
-  public void exec() {
-    while (!this.isFinal(this.current)) {
-    <#list ast.states as s>
-      <#list s.transitions as t>
-        if (this.current.equals(State.${s.name})) {
-          this.current = getRandomSuccessorState(State.${s.name});  
-          System.out.println("Entering state '" + this.current.toString() + "'.");
-        }
+  /**
+   * Executes the automaton on the list of input words until a final state is reached
+   * or no futher transition is possible.
+   * @attribute inputs List of input words
+   */
+  public boolean exec(List<String> inputs) {
+    // run until no further transition is possible
+    for (int i = 0; i < inputs.size(); i++) {
+      String currentInput = inputs.get(i);
+      State nextState = null;
+      <#list ast.states as s>
+        <#list s.transitions as t>
+          if (this.current.equals(State.${s.name}) && currentInput.equals(${t.input})) {
+            System.out.println("Going from state ${s.name} to ${s.to} on word ${t.input}");
+            nextState = State.${s.to});  
+          } // end if
+        </#list>
       </#list>
-    </#list>
+        if (this.nextState == null) { // no read until end, but no further transitions
+          return false;
+        }
+        else {
+          this.currentState = nextState;
+        }
+      } // end for
+      
+      return this.isFinal(this.currentState));
     }
   }
 ```
