@@ -144,7 +144,7 @@ class ${ast.getName()} {
     }
   }
   
-  private State current = selectInitialState();
+  private State current = null;
   private List<State> initialStates = new ArrayList<State>(); 
   private List<State> finalStates = new ArrayList<State>();
   
@@ -153,25 +153,12 @@ class ${ast.getName()} {
       <#if s.initial> this.initialStates.add(State.${s.name}); </#if>
       <#if s.r__final> this.finalStates.add(State.${s.name}); </#if>
     </#list>
+    this.current = this.initialStates(random(initialStates.size()));
   }
   
   private int random(int max) { return ThreadLocalRandom.current().nextInt(0, max); }
   
-  private State selectRandomInitialState() { return this.initialStates(return(initialStates.size())); }
-  
   private boolean isFinal(State s) { return this.finalStates.contains(s); }
-  
-  private State selectRandomSuccessorState(State s) {
-    int r = return(${s.transitions.size()});
-    <#assign i = 0/>
-    switch (r) {
-    <#list s.transitions as t>
-      case ${i}: return State.fromName(${t.to});
-      <#assign i =i+1/>
-    </#list>
-      case default: return null;
-    }
-  }
   
   /**
    * Executes the automaton on the list of input words until a final state is reached
@@ -195,12 +182,12 @@ class ${ast.getName()} {
           return false;
         }
         else {
-          this.currentState = nextState;
+          this.current = nextState;
         }
       } // end for
       
       // read the complete input, let's see whether reached state is final
-      return this.isFinal(this.currentState));
+      return this.isFinal(this.current));
     }
   }
 ```
