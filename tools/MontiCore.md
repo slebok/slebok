@@ -16,7 +16,6 @@ At the core of each MontiCore language is a composed set of context-free grammar
 
 ```
 grammar Automaton extends de.monticore.lexicals.Lexicals {
-
   symbol scope Automaton = "automaton" Name "{" (State | Transition)* "}" ;
 
   symbol scope State = 
