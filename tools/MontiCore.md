@@ -8,36 +8,20 @@
 
 ## Description
 
-MontiCore is a full-fledged, open-source, language workbench for the design and realization of textual domain-specific languages (DSL). It enables the research of model-based software development methods employing a variety of DSLs and modeling languages. On top of this, MontiCore and its DSL products are successfully in use in academic and industrial research projects in various domains such as automotive software modeling, cloud architecture and security modeling, model-based robotics, smart energy management, neural network modeling. The design rationale of MontiCore is to provide a powerful and efficient workbench for the agile creation of DSLs along with their accompanying infrastructure such as analyses, transformations, and code generators. MontiCore features a functional and highly extensible architecture which allows to even further customize the DSL development process itself. 
+MontiCore is a full-fledged, open-source, language workbench for the design and realization of textual domain-specific languages (DSL). It enables the research of model-based software development methods employing a variety of DSLs and modeling languages with specific focs on language composition, embedding, extension, aggregation, and refinement. On top of this, MontiCore and its DSL products are successfully in use in academic and industrial research projects in various domains such as automotive software modeling, cloud architecture, security modeling, model-based robotics, smart energy management, and neural network modeling. The design rationale of MontiCore is to provide a powerful and efficient workbench for the agile creation of DSLs along with their accompanying infrastructure such as analyses, transformations, and code synthesis. MontiCore features a functional and highly extensible architecture which allows to even further customize the DSL development process itself. 
 
 ## Example
 
-At the core of each MontiCore language is a context-free grammar that defines abstract syntax and concrete syntax of the language under development in an integrated description. From this grammar, MontiCore generates model-processing infrastructure (e.g., parsers, abstract syntax classes) and additional infrastructure for well-formedness checking with Java rules as well as for template-based code generation using the [FreeMarker](https://freemarker.apache.org/) template engine.  
+At the core of each MontiCore language is a composed set of context-free grammars that define abstract syntax and concrete syntax of the language under development in an integrated description. From each of these grammars, MontiCore generates composable model-processing infrastructure (e.g., parsers, abstract syntax classes), infrastructure for well-formedness checking with Java rules and for template-based code generation using the [FreeMarker](https://freemarker.apache.org/) template engine.  
 
 ```
 grammar Automaton extends de.monticore.lexicals.Lexicals {
 
-  /** A ASTAutomaton represents a finite automaton
-   * @attribute name Name of the automaton
-   * @attribute states List of states
-   * @attribute transitions List of transitions
-   */
   symbol scope Automaton = "automaton" Name "{" (State | Transition)* "}" ;
 
-  /** A ASTState represents a state of a finite automaton
-   * @attribute name Name of state
-   * @attribute initial True if state is initial state
-   * @attribute final True if state is a final state
-   * @attribute transitions List of transitions
-   */
   symbol scope State = 
     "state" Name (("<<" ["initial"] ">>" ) | ("<<" ["final"] ">>" ))* ( ("{" Transition* "}") | ";") ;
 
-  /** A ASTTransition represents a transition
-   * @attribute from Name of the state from which the transitions starts
-   * @attribute input Activation signal for this transition
-   * @attribute to Name of the state to which the transitions goes
-   */ 
   Transition =  from:Name "-" input:Name ">" to:Name ";" ;
 }
 ```
@@ -51,14 +35,14 @@ classdiagram Automaton {
 
   public class ASTAutomaton {
     protected String name;
-    protected java.util.List<Automaton.ASTState> states;
-    protected java.util.List<Automaton.ASTTransition> transitions;
+    protected List<ASTState> states;
+    protected List<ASTTransition> transitions;
   }
 
   public class ASTState {
     protected String name;
-    protected java.util.List<Automaton.ASTState> states;
-    protected java.util.List<Automaton.ASTTransition> transitions;
+    protected List<ASTState> states;
+    protected List<.ASTTransition> transitions;
     protected boolean initial;
     protected boolean r__final;
   }
