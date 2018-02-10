@@ -175,6 +175,8 @@ class ${ast.getName()} {
   }
 ```
 
+For **compositional** language development, MontiCore features the notion of language commponents, which can be composed, aggregated, and embedded into larger language composites. The notion of **conservative extension** assists black-box reuse of language components and functionality engineered for these components, such as builders, visitors, context condition checks, and generators. All composition techniques are fully compatible with handcrafted extensions. 
+
 ## Key sources
 * Pedram Mir Seyed Nazari:MontiCore: Efficient Development of Composed Modeling Language Essentials. In: Shaker Verlag, ISBN 978-3-8440-5320-3. Aachener Informatik-Berichte, Software Engineering, Band 29. 2017. [PDF](http://www.se-rwth.de/phdtheses/Diss-Nazari-MontiCore-Efficient-Development-of-Composed-Modeling-Language-Essentials.pdf)
 * Arne Haber, Markus Look, Pedram Mir Seyed Nazari, Antonio Navarro Perez, Bernhard Rumpe, Steven Völkel, Andreas Wortmann:
