@@ -143,11 +143,6 @@ class ${ast.getName()} {
   
   private boolean isFinal(State s) { return this.finalStates.contains(s); }
   
-  /**
-   * Executes the automaton on the list of input words until a final state is reached
-   * or no futher transition is possible.
-   * @attribute inputs List of input words
-   */
   public boolean exec(List<String> inputs) {
     // run until no further transition is possible
     for (int i = 0; i < inputs.size(); i++) {
