@@ -32,7 +32,9 @@ FIXME: application areas, success stories
 
 FIXME: [synthesized](../terms/synthesized_attribute.md), [inherited](../terms/inherited_attribute.md), [intrinsic](../terms/intrinsic_attribute.md)
 
-FIXME: [higher-order](../terms/higher-order_attribute.md) Vogt, [forwarding](../terms/attribute_forwarding.md) Van Wyk
+FIXME: [higher-order](../terms/higher-order_attribute.md) Vogt
+
+FIXME: check Boyland remote terms
 
 FIXME: [reference](../terms/reference_attribute.md) Hedin, [parameterized](../terms/parameterized_attribute.md)
 
@@ -42,9 +44,11 @@ FIXME: [circular](../terms/circular_attribute.md) Farrow
 
 FIXME: [copy rules](../terms/attribute_copy_rule.md)
 
+FIXME: remote attributes (check Boyland terminology)
+
 FIXME: symbol computations, abstract roles
 
-FIXME: remote attributes
+FIXME: [forwarding](../terms/attribute_forwarding.md) Van Wyk
 
 FIXME: [collection](../terms/collection_attribute.md) Boyland thesis
 
@@ -54,7 +58,7 @@ FIXME: aspects
 
 ## Evaluation
 
-A key focus of research on attribute grammars is on efficient [attribute evaluation](../terms/attribute_evaluation_algorithm).
+A key focus of research on attribute grammars is on efficient [attribute evaluation](../terms/attribute_evaluation_algorithm.md).
 The need is to obtain a schedule that determines the order in which attribute occurrences in a structure (tree or graph) will be evaluated.
 A valid schedule must obey the dependencies between attribute occurrences as expressed by the equations.
 
@@ -89,6 +93,8 @@ FIXME: evaluation as tree is constructed, S-attributed etc
 [incremental](../terms/incremental_attribute_evaluation.md) or [batch](../terms/batch_attribute_evaluation.md)
 
 [exhaustive](../terms/exhaustive_attribute_evaluation.md) or [demand-driven](../terms/demand-driven_attribute_evaluation.md)
+
+concurrent evaluation
 
 Instead of evaluating all of the attributes in one go, an incremental approach can be used to only evaluate attributes that are needed.
 For example, in an interactive editing environment the tree might represent a program that is being edited and attributes will be evaluated incrementally in response to user edit actions.
