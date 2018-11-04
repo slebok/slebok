@@ -11,12 +11,12 @@ Some key features of JastAdd:
 
 * Object-oriented abstract syntax
 * Static aspects for modular specification of abstract syntax and attributes
-* Reference attributes
-* Parameterized attributes
-* Higher-order attributes
-* Collection attributes
-* Circular attributes
-* Attribute-dependent rewrites
+* [Reference attributes](../terms/reference_attribute.md)
+* [Parameterized attributes](../terms/parameterized_attribute.md)
+* [Higher-order attributes](../terms/higher-order_attribute.md)
+* [Collection attributes](../terms/collection_attribute.md)
+* [Circular attributes](../terms/circular_attributes.md)
+* [Attribute-dependent rewrites](attribute-dependent_rewrite.md)
 
 JastAdd generates Java code, and can be used together with any Java-based parser generator that supports user-defined semantic actions.
 
@@ -62,7 +62,7 @@ Examples of mature applications of JastAdd:
 1. [ExtendJ](http://extendj.org),
    an open source extensible Java compiler with a modular extensible architecture, supporting Java 1.4, 5, 6, 7, and 8. Has many extensions by both the JastAdd team and external users.
 
-2. [JModelica.org](http://www.modelon.com/products/jmodelicaorg/), an open source Modelica platform for simulation and optimization of dynamic models. JModelica.org is supported by the company Modelon.
+2. [JModelica.org](http://www.modelon.com), an open source Modelica platform for simulation and optimization of dynamic models. JModelica.org is supported by the company Modelon.
 
 
 ## Key sources

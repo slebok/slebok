@@ -15,9 +15,8 @@ Görel Hedin: Reference Attributed Grammars. Informatica (Slovenia) 24(3) (2000)
 * John Tang Boyland: Remote attribute grammars. J. ACM 52(4): 627-687 (2005) http://doi.acm.org/10.1145/1082036.1082042
 
 ## Known Tools
-* [JastAdd](http://jastadd.org)
-* Silver
+* [JastAdd](../tools/Jastadd.md)
+* [Silver](../tools/Silver.md)
 * Kiama
 * JavaRAG
 * RACR
-
