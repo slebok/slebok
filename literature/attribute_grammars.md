@@ -22,11 +22,31 @@ Modern attribute grammar systems go well beyond Knuth's original ideas, includin
 Attribute grammars were originally developed for static analysis of programming languages.
 For example, attributes can encode naming or typing information and can be used to enforce conditions on the programs that a compiler accepts.
 
+TODO: static analysis, code generation, and editor support are the applications considered below.
 FIXME: more
 
 However, an attribute grammar can be used for any problem that can be formulated in terms of tree decoration.
 
 FIXME: application areas, success stories
+
+### An example
+
+Consider a imperative programming language.
+
+Attributes in this example that provide analsysis the user sees
+- type
+- list or errors
+- constant-value:  Maybe<Value>
+- translation to some target language
+- reference to declartion, from variable use
+- dead code
+- definite assignment
+- inferred type
+
+Attributes used to implement the above properties
+- environment, binding names to types
+- context, binding names to values
+- reaching-definitions 
 
 ## Attribute kinds
 
