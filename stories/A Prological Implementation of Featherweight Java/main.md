@@ -206,10 +206,107 @@ step(cast(D, new(C, Vs)), new(C, Vs), P) :-
 step(faccess(T_0, F), faccess(Tp_0, F), P) :-
     \+ is_val(T_0), !,
     eval( T_0 , Tp_0 ,P).
-```
+    
+% E-Invk-Recv)
+step(minvoc(T_0, M, Ts), minvoc(Tp_0, M, Ts), P) :-
+    \+ is_val(T_0), !,
+    eval( T_0 , Tp_0 ,P).
 
-and so on and so forth.
+% E-Invk-Arg
+step(minvoc(V_0, M, Ts), minvoc(V_0, M, Tps), P) :-
+    is_val(V_0), !, % for is_val(Ts), E-Invk-New applies
+    select(T_i, Ts, Tp_i, Tps), \+ is_val(T_i), !, % will succeed; see above
+    eval( T_i , Tp_i ,P).
+
+% E-New-Arg
+step(   new(C, Ts)   ,   new(C, Tps)   ,P) :-
+    select(T_i, Ts, Tp_i, Tps), \+ is_val(T_i), !, % all ground Ts caught by E-InvkNew
+    eval( T_i , Tp_i ,P).
+
+% E-Cast
+step(   cast(C, T_0)   ,   cast(C, Tp_0)   ,P) :-
+    eval( T_0 , Tp_0 ,P).
+```
 
 ## Typing
 
 ![alt text](TAPL%20Fig.%2019-4.png "Typing")
+
+```prolog
+% T-Var
+type(E, varaccess(X), C, _) :-
+    memberchk(variable(C, X), E), !.
+
+% T-Field
+type(E, faccess(T0, Fi), Ci, P) :-
+    type(E, T0, C0, P),
+    fields(C0, P, Fs),
+    memberchk(field(Ci, Fi), Fs).
+
+% T-Invk
+type(E, minvoc(T0, M, Ts), C, P) :-
+    type(E, T0, C0, P),
+    mtype(M, C0, P, (Ds -> C)), %TBD: move P to end
+    type(E, Ts, Cs, P),
+    subtype(Cs, Ds, P).
+
+% T-New
+type(E, new(C, Ts), C, P) :-
+    fields(C, P, Fs),
+    findall(D, member(field(D, _), Fs), Ds),
+    type(E, Ts, Cs, P),
+    subtype(Cs, Ds, P).
+
+% T-UCast
+type(E, cast(C, T0), C, P) :-
+    type(E, T0, D, P),
+    subtype(D, C, P), !.
+
+% T-DCast
+type(E, cast(C, T0), C, P) :-
+    type(E, T0, D, P),
+    subtype(C, D, P),
+    C \= D, !.
+
+% T-SCast
+type(E, cast(C, T0), C, P) :-
+    % C \<: D and D \<: C follow from above cuts
+    type(E, T0, D, P),
+    writeln("cross cast from ~w to ~w!", [D, C]).
+
+% typing a list of terms (implicit in TAPL)
+type(_, [], [], _).
+type(E, [T|Ts], [C|Cs], P) :-
+    type(E, T, C, P),
+    type(E, Ts, Cs, P).
+
+% Method Typing *
+ok(method(C0, M, Xs, T0), C, P) :-
+    findall(Ci, member(field(Ci, _), Xs), Cs),
+    type([variable(C, this)|Xs], T0, E0, P),
+    subtype(E0, C0, P),
+    P = program(CL), memberchk(class(C, D, _, _, _), CL),
+    override(M, D, (Cs -> C0), P).
+
+% swap arguments to enable lifting over lists of methods using maplist
+ok4all(C, P, M) :- ok(M, C, P).
+
+% Class Typing *
+ok(class(C, D, Fs, K, Ms), P) :-
+    C \= D, \+ subtype(D, C, P), % anti-symmetry; not in TAPL, Fig. 19-4
+    findall(init(F, F), member(field(_, F), Fs), Is), % TBD: init(F, F) corresponds to?
+    K = constructor(C, Xs, Ss, Is),
+    findall(field(Cx, Nx), member(variable(Cx, Nx), Xs), GFs),
+    findall(field(_, S), member(S ,Ss), Gs), % type of S not checked???
+    append(Gs, Fs, GFs),
+    fields(D, P, Gs), %TBD: move P to end
+    maplist(ok4all(C, P), Ms).
+
+% swap arguments to enable lifting over lists of classes using maplist
+ok4all(P, C) :- ok(C, P).
+
+% Program Typing *
+ok(P) :-
+    P = program(Cs),
+    maplist(ok4all(P), Cs).
+```
