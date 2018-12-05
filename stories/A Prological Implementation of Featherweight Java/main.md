@@ -205,27 +205,27 @@ step(cast(D, new(C, Vs)), new(C, Vs), P) :-
 % E-Field
 step(faccess(T_0, F), faccess(Tp_0, F), P) :-
     \+ is_val(T_0), !,
-    eval( T_0 , Tp_0 ,P).
+    eval(T_0, Tp_0, P).
     
 % E-Invk-Recv)
 step(minvoc(T_0, M, Ts), minvoc(Tp_0, M, Ts), P) :-
     \+ is_val(T_0), !,
-    eval( T_0 , Tp_0 ,P).
+    eval(T_0, Tp_0, P).
 
 % E-Invk-Arg
 step(minvoc(V_0, M, Ts), minvoc(V_0, M, Tps), P) :-
     is_val(V_0), !, % for is_val(Ts), E-Invk-New applies
     select(T_i, Ts, Tp_i, Tps), \+ is_val(T_i), !, % will succeed; see above
-    eval( T_i , Tp_i ,P).
+    eval(T_i, Tp_i, P).
 
 % E-New-Arg
-step(   new(C, Ts)   ,   new(C, Tps)   ,P) :-
+step(new(C, Ts), new(C, Tps), P) :-
     select(T_i, Ts, Tp_i, Tps), \+ is_val(T_i), !, % all ground Ts caught by E-InvkNew
-    eval( T_i , Tp_i ,P).
+    eval(T_i, Tp_i, P).
 
 % E-Cast
-step(   cast(C, T_0)   ,   cast(C, Tp_0)   ,P) :-
-    eval( T_0 , Tp_0 ,P).
+step(cast(C, T_0), cast(C, Tp_0), P) :-
+    eval(T_0, Tp_0, P).
 ```
 
 ## Typing
