@@ -160,11 +160,11 @@ The rule for values is not used for parsing values (recall that the syntax of va
 
 The evaluation rules of FJ are given in TAPL, Fig. 19-3:
 
-(include figure here)
+![alt text](TAPL%20Fig.%2019-3.png "Evaluation")
 
 They make use of the auxiliary definitions provided by Fig. 19-2 (which are also used by the typing rules; see below):
 
-(include figure here)
+![alt text](TAPL%20Fig.%2019-2.png "Auxiliary")
 
 The evaluation rules adhere to a small-step style, meaning that they are repeatedly applied until a value is produced or evaluation gets stuck. This evaluation loop is implemented by the Prolog clause
 
@@ -207,3 +207,9 @@ step(faccess(T_0, F), faccess(Tp_0, F), P) :-
     \+ is_val(T_0), !,
     eval( T_0 , Tp_0 ,P).
 ```
+
+and so on and so forth.
+
+## Typing
+
+![alt text](TAPL%20Fig.%2019-4.png "Typing")
