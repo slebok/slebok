@@ -152,7 +152,7 @@ v(new(C, Vs)) -->
     symbol(")").
 ```
 
-The rule for values is not used for parsing values (recall that the syntax of values if covered by the syntax of terms), but for checking whether a term is a values (%CHECKME: are terms and values not from different domains? the syntactic and the semantic domain?). This is done by passing it the syntax tree of a term (and ignoring the string that this produces); see below.
+The rule for values is not used for parsing values (recall that the syntax of values if covered by the syntax of terms), but for checking whether a term is a value (%CHECKME: are terms and values not from different domains? the syntactic and the semantic domain?). This is done by passing it the syntax tree of a term (and ignoring the string that this produces); see below.
 
 ## Evaluation
 
@@ -166,7 +166,7 @@ They make use of the auxiliary definitions provided by Fig. 19-2 (which are also
 
 (include figure here)
 
-The rules adhere to a small-step style, meaning that they are repeatedly applied until a value is produced or evaluation gets stuck. This evaluation loop is implemented by the Prolog clause
+The evaluation rules adhere to a small-step style, meaning that they are repeatedly applied until a value is produced or evaluation gets stuck. This evaluation loop is implemented by the Prolog clause
 
 ```prolog
 eval(T, T, _) :- is_val(T), !. % term is ground -> the term is the value!
@@ -177,3 +177,33 @@ eval(T, V, P) :-
 
 where `is_val(T)` calls `phrase(v(T), _)` or lifts it over the members of `T` if `T` is a list. The third argument `P`holds the program in whose context the term `T` is evaluated to the value `V`. 
 
+The evaluation rules themselves are implemented as follows.
+
+```prolog
+% E-ProjNew
+step(faccess(new(C, Vs), F_i), V_i, P) :-
+    is_val(Vs), !,
+    fields(C, P, Fs),
+    nth0(I, Fs, field(_, F_i)),
+    nth0(I, Vs, V_i).
+```
+
+Here, the head of the rule makes sure that it can only be applied to field accesses on constuctor invocations, while the first subgoal makes sure that `Vs` is indeed a list of values, which is another precondition to rule application. The repeated invocation of `nth0` selects from `Vs`, the list of values passed to the constructor of `C`, the one assigned to the field named `F_i` (where correspondence is via position `I`). `fields` is an auxiliary function defined in TAPL Fig. 19-2; note that it depends of the program `P` (which is always implicit in TAPL).
+
+```prolog
+% E-InvkNew
+step(minvoc(new(C, Vs), M, Us), V, P) :-
+    is_val(Vs), is_val(Us), !,
+    mbody(M, C, P, (Xs, T_0)),
+    substitute([this|Xs], [new(C, Vs)|Us], T_0, V).
+
+% E-CastNew
+step(cast(D, new(C, Vs)), new(C, Vs), P) :-
+    is_val(Vs), !,
+    subtype(C, D, P).
+
+% E-Field
+step(faccess(T_0, F), faccess(Tp_0, F), P) :-
+    \+ is_val(T_0), !,
+    eval( T_0 , Tp_0 ,P).
+```
