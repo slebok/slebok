@@ -15,14 +15,14 @@ The syntax of FJ is given in TAPL, Fig. 19-1:
 Note that the grammar uses nonterminals and metavariables (the latter are introduced in the book's accompanying text, and here can be identified by the absence of corresponding productions).
 
 There are four things I'd like to point out:
-1. The overline notation replaces for the Kleene star found in other grammar languages, subject to conventions that, had they not been provided in the accompanying text, could have only be derived from another syntax specification of Java. The grammar as is can only be interpreted using extra knowledge; it cannot be used to drive a parser.
+1. The overline notation replaces for the Kleene star found in other grammar specification languages, subject to conventions that, were they not provided in the accompanying text, would need to be derived from another syntax specification of Java. That is, the grammar as is can only be interpreted using extra knowledge; alone it is insufficient to drive a parser.
 1. The grammar for terms is left recursive; also, the left associativity of member access requires some special treatment.
 1. The grammar for terms does not introduce parantheses, even though these are required for member access on cast expressions.
 1. Fig. 19-1 really specifies two grammars, one for programs (including terms) and one for values. The language of values is a sublanguage of the language of terms (all values are terms syntactically).
 
-The first finding is justified by the fact that the bindings of the metavariables (as performed by the parser) immediately serve the evaluation and typying rules.
+All findings are justified by the primary use of the grammar: providing an inductive definition of the language well-suited to serve the evaluation and typing rules. 
 
-The grammar is reconstructed as a DCG in Prolog as follows:
+A grammar that is also suitable for parsing is reconstructed as a DCG in Prolog as follows:
 
 ```prolog
 'P'(program(P)) --> repeating('CL'(P)).
