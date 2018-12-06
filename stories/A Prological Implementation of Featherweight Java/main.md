@@ -141,7 +141,9 @@ m(R, T) --> % method invocation
     m(minvoc(R, M, A), T).
 ```
 
-The grammar rule for terms required more elaborate reworking, to account for left recursion (removed by introducing `e`, for elementary terms), the left associativity of member access (catered for by `m` with two arguments, where the first builds up a possible chain of member accesses and the second returns it). Also, I fitted in the parentheses for member access on cast expressions; I am not sure how this accounts for the parentheses used in the evaluation rules of TAPL %CHECKME.
+The grammar rule for terms required more elaborate reworking, to account for left recursion (removed by introducing `e`, for elementary terms), the left associativity of member access (catered for by spending a second argument on `m` (the first builds up a possible chain of member accesses and the second returns it at the end of the chain). Also, I fitted in the parentheses for member access on cast expressions; I am not sure how this accounts for the parentheses used in the evaluation rules of TAPL %CHECKME.
+
+Note that the parser uses backtracking; even though, the grammar is unambiguous.
 
 ```prolog
 v(new(C, Vs)) -->
@@ -152,11 +154,12 @@ v(new(C, Vs)) -->
     symbol(")").
 ```
 
-The rule for values is not used for parsing values (recall that the syntax of values if covered by the syntax of terms), but for checking whether a term is a value (%CHECKME: are terms and values not from different domains? the syntactic and the semantic domain?). This is done by passing it the syntax tree of a term (and ignoring the string that this produces); see below.
+The rule for values is not used for parsing values (recall that the syntax of values is covered by the syntax of terms), but for checking whether a term is a value (%CHECKME@Ralf: are terms and values not from different domains? the syntactic and the semantic domain?). This will be done by generating (or attempting to generate) a string from the syntax tree (which, in Prolog, is done by invoking the grammar with a ground parse tree and a variable sentence).
 
 ### Summary
 
-The primary purpose of the grammar as provided by Fig. 19-1 of TAPL is to hint at a specification of an abstract syntax of FJ. The above DCG makes this specification explicit, by constructing a parse tree. The occurences of the metavariables in Fig. 19-1 (not the metavariables themselves) relate to logic variables in the DCG rules; the
+The primary purpose of the grammar as provided by Fig. 19-1 of TAPL is to hint at a specification of an abstract syntax of FJ, on which the specifications of Figs. 19-2 through 4 rely. The above DCG makes this specification explicit, by defining the term structures (in the arguments of the rule heads) from which syntax trees are constructed. The occurences of the metavariables representing idetifiers in Fig. 19-1 (not the metavariables themselves) translate to logic variables in the DCG rules, which serve to insert the accepted identifiers literally in the syntax tree; all other (occurrences of) metavariables of Fig. 19-1 translate to nonterminals of the DCG (Prolog goals and subgoals).
+
 ## Evaluation
 
 ### Original Evaluation Rules
