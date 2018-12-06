@@ -1,9 +1,11 @@
+# A Prological Reconstruction of Featherweight Java from TAPL
 
-This story tells what I found while I reconstructed parser, evaluator and type checker of Featherweight Java (FJ) from Benjamin Pierce's book "Types and Programming Languages" (TAPL) %LINK, Sect. 19, in Prolog (SWI-Prolog %LINK, to be precise). The insights of this story, if any, come from observing
+This story tells what I found while I reconstructed parser, evaluator and type checker of Featherweight Java (FJ) from Benjamin Pierce's book %LINKME:"Types and Programming Languages" (TAPL), Sect. 19, in %LINKME:Prolog (%LINKME:SWI-Prolog, to be precise). The insights of this story, if any, come from observing
+
 1. how the implementation reconstructs the semantics of the book's figures' specifying syntax and semantics of FJ, and 
-1. how the implementation deviates from the specifications (and why).
+2. how the implementation deviates from the specifications (and why).
 
-My work was partly motivated by Guy Steele's talk ["It’s Time for a New Old Language"](https://www.youtube.com/watch?v=dCuZkaaou0Q).
+The work was partly motivated by Guy Steele's talk ["It’s Time for a New Old Language"](https://www.youtube.com/watch?v=dCuZkaaou0Q).
 
 ## Syntax and Parser
 
@@ -11,16 +13,17 @@ My work was partly motivated by Guy Steele's talk ["It’s Time for a New Old La
 
 The syntax of FJ is given in TAPL, Fig. 19-1:
 
-(include figure here)
+%FIXME:(include figure here)
 
-Note that the grammar uses nonterminals, or *metavariables*, that have no rules (namely C, f, and m); they expand to (represent) identifiers.
+Note that the grammar uses nonterminals, or *metavariables*, that have no rules (namely *C*, *f*, and *m*); they expand to (or represent) identifiers.
 
 Here is a number of findings:
-1. The overline notation replaces for the Kleene star found in other grammar specification languages, subject to conventions that, were they not detailed in the accompanying text, would need to be derived from another syntax specification of Java. That is, the grammar as is can only be interpreted using extra knowledge; alone it is insufficient to drive a parser.
-1. Multiple occurrences of the same metavariable in the same rule may expand to different terminals. For instance, the two occurences of "C" in "class C extends C" may expand to (and represent) different class names.
-1. The grammar for terms is left recursive; also, the left associativity of member access requires some special treatment.
-1. The grammar for terms does not introduce parentheses, even though these are required for member access on cast expressions.
-1. Fig. 19-1 really specifies two grammars, one for programs (including terms) and one for values. The language of values is a sublanguage of the language of terms (all values are terms syntactically).
+
+1. The overline notation replaces for the %LINKME:Kleene star found in other grammar specification languages, subject to conventions that, were they not detailed in the accompanying text, would need to be derived from another syntax specification of Java. That is, the grammar as is can only be interpreted using extra knowledge; alone it is insufficient to drive a parser.
+2. Multiple occurrences of the same metavariable in the same rule may expand to different terminals. For instance, the two occurences of "C" in "class C extends C" may expand to (and represent) different class names. (In the syntax specification, metavariables are like nonterminals in this respect.)
+3. The grammar for terms is left recursive; also, the left associativity of member access requires some special treatment.
+4. The grammar for terms does not introduce parentheses, even though these are required for member access on cast expressions.
+5. Fig. 19-1 really specifies two grammars, one for programs (including terms) and one for values. The language of values is a sublanguage of the language of terms (all values are terms syntactically).
 
 All findings are justified by the primary use of the grammar: providing an inductive definition of the language (or, rather, its syntax trees) suited to serve the evaluation and typing rules. 
 
@@ -32,7 +35,7 @@ A grammar that is also suitable for parsing is reconstructed as a Definite Claus
 'P'(program(P)) --> repeating('CL'(P)).
 ```
 
-This (start) rule is implicit in TAPL. The (non-ground) term `program(P)` that is an argument to the start nonterminal `'P'` (quoted becaue in Prolog, unquoted identifiers starting with a capital letter are interpreted as variables) serves the construction of the syntax tree; the (root) node is a term of type `program`. (Unfortunately, Prolog is untyped and SWI-Prolog has no way of declaring structs.) `repeating` is a meta-predicate that implements the Kleene star for its argument, a nonterminal. In the above rule, it effects to `P` being unified with a list of nodes representing class definitions (possibly empty).
+This (start) rule is implicit in TAPL. The (non-ground) term `program(P)` that is an argument to the start nonterminal `'P'` (quoted because in Prolog, unquoted identifiers starting with a capital letter are interpreted as variables) serves the construction of the syntax tree; the (root) node is a term of type `program`. (Unfortunately, Prolog is untyped and SWI-Prolog has no way of declaring structs.) `repeating` is a meta-predicate that implements the Kleene star for its argument, a nonterminal. In the above rule, it effects to `P` being unified with a list of nodes representing class definitions (possibly empty).
 
 ```prolog
 'CL'(class(C, D, F, K, M)) -->
@@ -51,8 +54,8 @@ This (start) rule is implicit in TAPL. The (non-ground) term `program(P)` that i
     identifier(F), % field name
     symbol(";").
 ```
-    
-The metavariable C from the original grammar (where it represents class names) translates to a logic variable. Deviating from the original grammar, different metavariables `C` and `D` are introduced for the two occurences (encoded by Prolog variables with corresponding names) instead of the single metaviable C in the original grammar. This is necessary because otherwise, the grammar would require classes to extend themselves. Also, it introduces a new non-terminal `'F'`, which is required to use `repeating` for accepting sequences of field declarations.
+
+The metavariable *C* from the original grammar (where it represents class names) translates to a logic variable. Deviating from what the original grammar seems to suggest, different logic variables `C` and `D` are introduced for the two occurrences of *C* in the original grammar. This is necessary because unlike for a metavariable in the syntax specification, multiple occurrences of a logic variable in the same rule express equality of whatever gets substituted for them. The rule *'CL'* also introduces a new non-terminal `'F'`, which is required so as to be able to use the metapredicate `repeating` for accepting sequences of field declarations.
 
 ```prolog
 'K'(constructor(C, X, SF, TF)) -->
@@ -78,7 +81,7 @@ init(init(F, X)) -->
     keyword(";").
 ```
 
-The rule for constructors (`'K'`) uses a variant of `repeating` specifying a separator. The new nonterminal `'init'` was introduced for the same reason as `'F'` above; note that, unlike the original grammar, it binds to the metavariable `TF` a list of pairs (where the original grammar binds a pair of lists to two metavariables f overlined).
+The rule for constructors (`'K'`) uses a variant of `repeating` specifying a separator. The new nonterminal `init` was introduced for the same reason as `'F'` above; note that, unlike the original grammar, it binds to the variable `TF` a list of pairs (where the original grammar binds a pair of lists to two metavariables *f* overlined).
 
 ```prolog
 'M'(method(C, M, X, T)) -->
@@ -98,7 +101,7 @@ variable(variable(C, X)) -->
     identifier(X). % variable name
 ```
 
-Again, a new nonterminal (`variable`) was introduced just for the purpose of repetition.
+Again, a new nonterminal `variable` was introduced for the purpose of handling repetition.
 
 ```prolog
 t(cast(C, T)) --> % cast
@@ -127,7 +130,6 @@ e(new(C, A)) --> % object creation
 % member access terms
 m(T, T) --> % no member access
     empty.
-
 m(R, T) --> % field access
     symbol("."),
     identifier(F),
@@ -141,9 +143,9 @@ m(R, T) --> % method invocation
     m(minvoc(R, M, A), T).
 ```
 
-The grammar rule for terms required more elaborate reworking, to account for left recursion (removed by introducing `e`, for elementary terms), the left associativity of member access (catered for by spending a second argument on `m` (the first builds up a possible chain of member accesses and the second returns it at the end of the chain). Also, I fitted in the parentheses for member access on cast expressions; I am not sure how this accounts for the parentheses used in the evaluation rules of TAPL %CHECKME.
+The grammar rule for terms required more elaborate reworking, to account for left recursion (removed by introducing `e`, for elementary terms), the left associativity of member access (catered for by spending a second argument on `m` (where the first builds up a possible chain of member accesses and the second returns it at the end of the chain). Also, I fitted in the parentheses for member access on cast expressions; @Vadim%CHECKME:I am not sure how this accounts for the parentheses used in the evaluation rules of TAPL.
 
-Note that the parser uses backtracking; even though, the grammar is unambiguous.
+Note that the parser uses backtracking, and that the grammar is unambiguous.
 
 ```prolog
 v(new(C, Vs)) -->
@@ -154,11 +156,11 @@ v(new(C, Vs)) -->
     symbol(")").
 ```
 
-The rule for values is not used for parsing values (recall that the syntax of values is covered by the syntax of terms), but for checking whether a term is a value (%CHECKME@Ralf: are terms and values not from different domains? the syntactic and the semantic domain?). This will be done by generating (or attempting to generate) a string from the syntax tree (which, in Prolog, is done by invoking the grammar with a ground parse tree and a variable sentence).
+The rule for values is not used for parsing values (recall that the syntax of values is covered by the syntax of terms), but for checking whether a term is a value (@Ralf%CHECKME: are terms and values not from different domains? the syntactic and the semantic domain?). This will be done by generating (or attempting to generate) a string from the syntax tree (which, in Prolog, is done by invoking the grammar with a ground parse tree and a variable sentence).
 
 ### Summary
 
-The primary purpose of the grammar as provided by Fig. 19-1 of TAPL is to hint at a specification of an abstract syntax of FJ, on which the specifications of Figs. 19-2 through 4 rely. The above DCG makes this specification explicit, by defining the term structures (in the arguments of the rule heads) from which syntax trees are constructed. The occurences of the metavariables representing idetifiers in Fig. 19-1 (not the metavariables themselves) translate to logic variables in the DCG rules, which serve to insert the accepted identifiers literally in the syntax tree; all other (occurrences of) metavariables of Fig. 19-1 translate to nonterminals of the DCG (Prolog goals and subgoals).
+The primary purpose of the grammar as provided by Fig. 19-1 of TAPL is to hint at a specification of an abstract syntax of FJ, on which the specifications of Figs. 19-2 through 4 rely. The above DCG makes this specification explicit, by defining the term structures (in the arguments of the rule heads) from which syntax trees are constructed. The occurrences of the metavariables representing idetifiers in Fig. 19-1 (not the metavariables themselves) translate to logic variables in the DCG rules, which serve to insert the accepted identifiers literally in the syntax tree; all other (occurrences of) metavariables of Fig. 19-1 translate to nonterminals of the DCG (Prolog goals and subgoals).
 
 ## Evaluation
 
@@ -181,7 +183,7 @@ eval(T, V, P) :-
     eval(Tp, V, P).
 ```
 
-where `is_val(T)` calls `phrase(v(T), _)` or lifts it over the members of `T` if `T` is a list. The third argument `P`holds the program in whose context the term `T` is evaluated to the value `V`. 
+where `is_val(T)` calls [`phrase(v(T), _)`](http://www.swi-prolog.org/pldoc/doc_for?object=phrase/2) or lifts it over the members of `T` if `T` is a list. The third argument `P`holds the program in whose context the term `T` is evaluated to the value `V`. 
 
 The evaluation rules themselves are implemented as follows.
 
@@ -194,7 +196,7 @@ step(faccess(new(C, Vs), F_i), V_i, P) :-
     nth0(I, Vs, V_i).
 ```
 
-Here, the head of the rule makes sure that it can only be applied to field accesses on constuctor invocations, while the first subgoal makes sure that `Vs` is indeed a list of values, which is another precondition to rule application. The repeated invocation of `nth0` selects from `Vs`, the list of values passed to the constructor of `C`, the one assigned to the field named `F_i` (where correspondence is via position `I`). `fields` is an auxiliary function defined in TAPL Fig. 19-2; note that it depends of the program `P` (which is always implicit in TAPL).
+Here, the head of the rule makes sure that it can only be applied to field accesses on constructor invocations, while the first subgoal makes sure that the arguments to the constructor invocation, `Vs`, is indeed a list of values, which is another precondition to rule application. The repeated invocation of [`nth0`](http://www.swi-prolog.org/pldoc/man?predicate=nth0/3) selects from `Vs`, the list of values passed to the constructor of `C`, the one assigned to the field named `F_i` (where correspondence is via position `I`). `fields` is an auxiliary function defined in TAPL Fig. 19-2; note that it depends of the program `P` (which is always implicit in TAPL).
 
 ```prolog
 % E-InvkNew
@@ -316,3 +318,13 @@ ok(P) :-
     P = program(Cs),
     maplist(ok4all(P), Cs).
 ```
+
+# ToDos
+
+@{Ralf, Vadim}:
+
+Please vote: Should I try to introduce operators like '|-' and use ':' to make the Prolog rules resemble the inference rules of TAPL more closely?
+
+Please vote: Should I introduce additional auxiliary functions to implement metavariable binding in the inference rules (e.g., use something like value_of_field_i(...) rather than nth0(...), nth0(...) in E-ProjNew)?
+
+@Ralf: Your experience with supporting type safety arguments by analyzing the above rules from within Prolog would be greatly appreciated!
