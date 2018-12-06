@@ -1,6 +1,5 @@
-# A Prological Treatise of Featherweight Java
 
-This story tells how I reconstructed parser, evaluator and type checker of Featherweight Java (FJ) as described in TAPL, Sect. 19, in Prolog (SWI-Prolog, to be precise). The insights of this story, if any, come from observing
+This story tells what I found while I reconstructed parser, evaluator and type checker of Featherweight Java (FJ) from Benjamin Pierce's book "Types and Programming Languages" (TAPL) %LINK, Sect. 19, in Prolog (SWI-Prolog %LINK, to be precise). The insights of this story, if any, come from observing
 1. how the implementation reconstructs the semantics of the book's figures' specifying syntax and semantics of FJ, and 
 1. how the implementation deviates from the specifications (and why).
 
@@ -14,10 +13,11 @@ The syntax of FJ is given in TAPL, Fig. 19-1:
 
 (include figure here)
 
-Note that the grammar uses nonterminals and metavariables (the latter are introduced in the book's accompanying text, and here can be identified by the absence of corresponding productions).
+Note that the grammar uses nonterminals, or *metavariables*, that have no rules (namely C, f, and m); they expand to (represent) identifiers.
 
-There are four things I'd like to point out:
+Here is a number of findings:
 1. The overline notation replaces for the Kleene star found in other grammar specification languages, subject to conventions that, were they not detailed in the accompanying text, would need to be derived from another syntax specification of Java. That is, the grammar as is can only be interpreted using extra knowledge; alone it is insufficient to drive a parser.
+1. Multiple occurrences of the same metavariable in the same rule may expand to different terminals. For instance, the two occurences of "C" in "class C extends C" may expand to (and represent) different class names.
 1. The grammar for terms is left recursive; also, the left associativity of member access requires some special treatment.
 1. The grammar for terms does not introduce parentheses, even though these are required for member access on cast expressions.
 1. Fig. 19-1 really specifies two grammars, one for programs (including terms) and one for values. The language of values is a sublanguage of the language of terms (all values are terms syntactically).
@@ -52,7 +52,7 @@ This (start) rule is implicit in TAPL. The (non-ground) term `program(P)` that i
     symbol(";").
 ```
     
-Deviating from the original grammar, the first rule uses different metavariables `C` and `D` (encoded by Prolog variables with corresponding names) instead of the single metaviable C in the original grammar. This is necessary because otherwise, the grammar would require classes to extend themselves. Also, it introduces a new non-terminal `'F'`, which is required to use `repeating` for accepting sequences of field declarations.
+The metavariable C from the original grammar (where it represents class names) translates to a logic variable. Deviating from the original grammar, different metavariables `C` and `D` are introduced for the two occurences (encoded by Prolog variables with corresponding names) instead of the single metaviable C in the original grammar. This is necessary because otherwise, the grammar would require classes to extend themselves. Also, it introduces a new non-terminal `'F'`, which is required to use `repeating` for accepting sequences of field declarations.
 
 ```prolog
 'K'(constructor(C, X, SF, TF)) -->
@@ -154,6 +154,9 @@ v(new(C, Vs)) -->
 
 The rule for values is not used for parsing values (recall that the syntax of values if covered by the syntax of terms), but for checking whether a term is a value (%CHECKME: are terms and values not from different domains? the syntactic and the semantic domain?). This is done by passing it the syntax tree of a term (and ignoring the string that this produces); see below.
 
+### Summary
+
+The primary purpose of the grammar as provided by Fig. 19-1 of TAPL is to hint at a specification of an abstract syntax of FJ. The above DCG makes this specification explicit, by constructing a parse tree. The occurences of the metavariables in Fig. 19-1 (not the metavariables themselves) relate to logic variables in the DCG rules; the
 ## Evaluation
 
 ### Original Evaluation Rules
