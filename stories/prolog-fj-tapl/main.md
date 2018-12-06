@@ -1,9 +1,9 @@
 # A Prological Reconstruction of Featherweight Java from TAPL
 
-This story tells what I found while I reconstructed parser, evaluator and type checker of Featherweight Java (FJ) from Benjamin Pierce's book %LINKME:"Types and Programming Languages" (TAPL), Sect. 19, in %LINKME:Prolog (%LINKME:SWI-Prolog, to be precise). The insights of this story, if any, come from observing
+This is the story of how I naively reconstructed a parser, evaluator and type checker for Featherweight Java (FJ) from Benjamin Pierce's book %LINKME:"Types and Programming Languages" (TAPL), Sect. 19, in %LINKME:Prolog ([SWI-Prolog](http://www.swi-prolog.org/pldoc/man?predicate=select/4), to be precise). The insights of this story, if any, come from observing
 
 1. how the implementation reconstructs the semantics of the book's figures' specifying syntax and semantics of FJ, and 
-2. how the implementation deviates from the specifications (and why).
+2. how and why the implementation differs from the specifications.
 
 The work was partly motivated by Guy Steele's talk ["It’s Time for a New Old Language"](https://www.youtube.com/watch?v=dCuZkaaou0Q).
 
@@ -11,19 +11,19 @@ The work was partly motivated by Guy Steele's talk ["It’s Time for a New Old L
 
 ### Original Syntax Specification
 
-The syntax of FJ is given in TAPL, Fig. 19-1:
+The syntax of FJ is given in TAPL, Fig. 19-1, left:
 
 %FIXME:(include figure here)
 
-Note that the grammar uses nonterminals, or *metavariables*, that have no rules (namely *C*, *f*, and *m*); they expand to (or represent) identifiers.
+Note that the grammar uses nonterminals, or *metavariables*, that have no rules (namely *C*, *f*, and *m*); they expand to (or represent) identifiers (of classes, fields, and methods, resp.).
 
 Here is a number of findings:
 
-1. The overline notation replaces for the %LINKME:Kleene star found in other grammar specification languages, subject to conventions that, were they not detailed in the accompanying text, would need to be derived from another syntax specification of Java. That is, the grammar as is can only be interpreted using extra knowledge; alone it is insufficient to drive a parser.
-2. Multiple occurrences of the same metavariable in the same rule may expand to different terminals. For instance, the two occurences of "C" in "class C extends C" may expand to (and represent) different class names. (In the syntax specification, metavariables are like nonterminals in this respect.)
-3. The grammar for terms is left recursive; also, the left associativity of member access requires some special treatment.
-4. The grammar for terms does not introduce parentheses, even though these are required for member access on cast expressions.
-5. Fig. 19-1 really specifies two grammars, one for programs (including terms) and one for values. The language of values is a sublanguage of the language of terms (all values are terms syntactically).
+1. The overline notation replaces for the %LINKME:Kleene star found in other grammar specification languages, subject to conventions that, were they not detailed in the accompanying text, would need to be reconstructed from a more precise syntax specification of Java. That is, the grammar as is can only be interpreted using extra knowledge; alone it is insufficient to drive a parser.
+2. Multiple occurrences of the same metavariable in the same rule may expand to different terminals. For instance, the two occurrences of *C* in "class *C* extends *C*" may expand to (and represent) different class names. (In Fig. 19-1, metavariables are like nonterminals in this respect.)
+3. The grammar for terms is left recursive; also, the left associativity of member access requires attention.
+4. The term sublanguage does not introduce parentheses, even though these are required for member access on cast expressions.
+5. Fig. 19-1 really specifies two grammars, one for programs (including terms) and one for values. The language of values is a sublanguage of the language of terms in the sense that all values are also terms syntactically.
 
 All findings are justified by the primary use of the grammar: providing an inductive definition of the language (or, rather, its syntax trees) suited to serve the evaluation and typing rules. 
 
@@ -160,17 +160,24 @@ The rule for values is not used for parsing values (recall that the syntax of va
 
 ### Summary
 
-The primary purpose of the grammar as provided by Fig. 19-1 of TAPL is to hint at a specification of an abstract syntax of FJ, on which the specifications of Figs. 19-2 through 4 rely. The above DCG makes this specification explicit, by defining the term structures (in the arguments of the rule heads) from which syntax trees are constructed. The occurrences of the metavariables representing idetifiers in Fig. 19-1 (not the metavariables themselves) translate to logic variables in the DCG rules, which serve to insert the accepted identifiers literally in the syntax tree; all other (occurrences of) metavariables of Fig. 19-1 translate to nonterminals of the DCG (Prolog goals and subgoals).
+The primary purpose of the grammar as provided by Fig. 19-1 of TAPL is to hint at a specification of an abstract syntax of FJ, on which the specifications of Figs. 19-2 through 4 rely. The above DCG makes this specification explicit, by defining the term structures (in the arguments of the rule heads) from which syntax trees are constructed. The occurrences of the metavariables representing identifiers in Fig. 19-1 (not the metavariables themselves) translate to logic variables in the DCG rules, which serve to insert the accepted identifiers literally in the syntax tree; all other (occurrences of) metavariables of Fig. 19-1 translate to nonterminals of the DCG (Prolog goals and subgoals).
 
 ## Extracting the Subtype Relation
 
-The subtype relation defined by an FJ program is specified by its `extends` clauses, plus the fact that `Object` is the root of the hierarchy (it does not have a supertype).  Note that the construction of the subtype relation from the program depends on the fact that `extends`is irreflexive.
+The subtype relation defined by an FJ program is specified by its `extends` clauses, plus the fact that `Object` is the root of the hierarchy (it does not have a supertype). 
 
 ### Original Rules
 
+The subtype relation is extracted from a program using the rules given in TAPL, Fig. 19-1, right. My observations:
+
+1. The first rule, a fact (or axiom), states reflexivity of the subtype relation. It uses a metavariable *C* that is not linked to a concrete program. Differing from the syntax specification in Fig.19-1, left, here the two occurrences of *C* stand for the same identifier (class name).
+2. The second rule states transitivity of the subtype relation. The metavariables *C*, *D*, and *E* stand for different class names in the general case; it is unclear whether the rule covers the cases that two or all three are the same.
+3. The third rule relates the subtype relation to a program. Again, it is unclear whether *C* and *D* stand for strictly different class names.
+4. There is no rule stating the antisymmetry required for a subtype relation.
+
 ### Implementation in Prolog
 
-The original subtype rules do not match Prolog's operational semantics well. Here is a recrafting: 
+The original subtype rules of Fig. 19-1 are not immediately accommodated by Prolog's operational semantics. Here is an amalgamation of the three rules into two: 
 
 ```prolog
 subtype(C, C, _) :- !.
@@ -178,11 +185,13 @@ subtype(C, D, P) :-
     P = program(CL),
     memberchk(class(C, E, _, _, _), CL), !,
     subtype(E, D, P).
+```
 
-/***
- * extension to lists of types
- ***/
+@{Ralf, Vadim}%CHECKME: Any idea how to make Prolog reflect the original specification more directly?
 
+Note that the logic variables `C`, `D`, and `E` may be instantiated with the same class name.
+
+```prolog
 subtype([], [], _).
 subtype([C|Cs], [D|Ds], P) :-
     subtype(C, D, P),
@@ -190,6 +199,8 @@ subtype([C|Cs], [D|Ds], P) :-
 ```
 
 %CHECKME: the extension to lists of types (required where?) needs to be made explicit.
+
+Note that the proof of subtype(C, D, P) may recur infinitely if the subtype relation is circular and hence not antisymmetric.
 
 ## Evaluation
 
@@ -207,9 +218,9 @@ The evaluation rules adhere to a small-step style, meaning that they are repeate
 
 Again, there are some observations to be made:
 
-1. Unlike for the syntax specification, multiple occurrences of the same metavariable in the same rule represent the same (meta)term. @Ralf%CHECKME: other word for metaterm? Note that "term" is ambiguous here, since it is used for expressions.
-2. The metavariables denoted by *t* overline etc. are implicitly indexed with indices ranging from 1 to *n*; the use of the same index *i* not only means that metavariables are selected from the same position of the sequences, but also that both sequences are of same length.
-3. The (order of the) rules implicitly specifies the evaluation order of subterms. For instance, for a term *t* = *t*_0.*m*(*t*_1, *t*_2), the evaluation order of the subterms *t*_0 though *t*_2 is from left to right. 
+1. Unlike for the syntax specification, multiple occurrences of the same metavariable in the same rule represent the same (meta)term. @Ralf%CHECKME: other word for metaterm? Note that "term" is ambiguous here, since TAPL uses it for expressions.
+2. The metavariables denoted by *t* overline etc. are implicitly indexed with indices ranging from 1 to *n*; the use of the same index *i* means that metavariables are selected from the same position of the corresponding sequences. Note that this presupposes that the sequences are of the same length, which may, but need not be, guaranteed by the syntax rules of FJ (it is only guaranteed where to sequences are accepted as a list of pairs).
+3. The rules and their order specify the evaluation order of subterms. For instance, for a term *t* = *t*_0.*m*(*t*_1, *t*_2), the evaluation order of the subterms *t*_0 through *t*_2 is from left to right. 
 
 ## Translation of Evaluation Rules to Prolog
 
