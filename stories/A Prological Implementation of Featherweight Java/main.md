@@ -162,6 +162,35 @@ The rule for values is not used for parsing values (recall that the syntax of va
 
 The primary purpose of the grammar as provided by Fig. 19-1 of TAPL is to hint at a specification of an abstract syntax of FJ, on which the specifications of Figs. 19-2 through 4 rely. The above DCG makes this specification explicit, by defining the term structures (in the arguments of the rule heads) from which syntax trees are constructed. The occurrences of the metavariables representing idetifiers in Fig. 19-1 (not the metavariables themselves) translate to logic variables in the DCG rules, which serve to insert the accepted identifiers literally in the syntax tree; all other (occurrences of) metavariables of Fig. 19-1 translate to nonterminals of the DCG (Prolog goals and subgoals).
 
+## Extracting the Subtype Relation
+
+The subtype relation defined by an FJ program is specified by its `extends` clauses, plus the fact that `Object` is the root of the hierarchy (it does not have a supertype).  Note that the construction of the subtype relation from the program depends on the fact that `extends`is irreflexive.
+
+### Original Rules
+
+### Implementation in Prolog
+
+The original subtype rules do not match Prolog's operational semantics well. Here is a recrafting: 
+
+```prolog
+subtype(C, C, _) :- !.
+subtype(C, D, P) :-
+    P = program(CL),
+    memberchk(class(C, E, _, _, _), CL), !,
+    subtype(E, D, P).
+
+/***
+ * extension to lists of types
+ ***/
+
+subtype([], [], _).
+subtype([C|Cs], [D|Ds], P) :-
+    subtype(C, D, P),
+    subtype(Cs, Ds, P).
+```
+
+%CHECKME: the extension to lists of types (required where?) needs to be made explicit.
+
 ## Evaluation
 
 ### Original Evaluation Rules
@@ -174,7 +203,17 @@ They make use of the auxiliary definitions provided by Fig. 19-2 (which are also
 
 ![alt text](TAPL%20Fig.%2019-2.png "Auxiliary")
 
-The evaluation rules adhere to a small-step style, meaning that they are repeatedly applied until a value is produced or evaluation gets stuck. This evaluation loop is implemented by the Prolog clause
+The evaluation rules adhere to a small-step style, meaning that they are repeatedly applied until a value is produced or evaluation gets stuck. 
+
+Again, there are some observations to be made:
+
+1. Unlike for the syntax specification, multiple occurrences of the same metavariable in the same rule represent the same (meta)term. @Ralf%CHECKME: other word for metaterm? Note that "term" is ambiguous here, since it is used for expressions.
+2. The metavariables denoted by *t* overline etc. are implicitly indexed with indices ranging from 1 to *n*; the use of the same index *i* not only means that metavariables are selected from the same position of the sequences, but also that both sequences are of same length.
+3. The (order of the) rules implicitly specifies the evaluation order of subterms. For instance, for a term *t* = *t*_0.*m*(*t*_1, *t*_2), the evaluation order of the subterms *t*_0 though *t*_2 is from left to right. 
+
+## Translation of Evaluation Rules to Prolog
+
+The evaluation loop is implemented by the Prolog clause
 
 ```prolog
 eval(T, T, _) :- is_val(T), !. % term is ground -> the term is the value!
@@ -183,7 +222,7 @@ eval(T, V, P) :-
     eval(Tp, V, P).
 ```
 
-where `is_val(T)` calls [`phrase(v(T), _)`](http://www.swi-prolog.org/pldoc/doc_for?object=phrase/2) or lifts it over the members of `T` if `T` is a list. The third argument `P`holds the program in whose context the term `T` is evaluated to the value `V`. 
+where `is_val(T)` calls [`phrase(v(T), _)`](http://www.swi-prolog.org/pldoc/doc_for?object=phrase/2) either directly or lifts it over the members of `T` if `T` is a list, to check that the term `T` represents a value (@Ralf%CHECKME: Do we not have a metatyping problem here? Is T not *either* a term *or* a value?). The third argument `P` of `eval` holds the program in whose context the term `T` is evaluated to the value `V`.  Note that the evaluation loop terminates successfully when the input term has been reduced to a value, and fails when it reaches a term that is not a value and cannot be reduced by a next step.
 
 The evaluation rules themselves are implemented as follows.
 
@@ -196,15 +235,19 @@ step(faccess(new(C, Vs), F_i), V_i, P) :-
     nth0(I, Vs, V_i).
 ```
 
-Here, the head of the rule makes sure that it can only be applied to field accesses on constructor invocations, while the first subgoal makes sure that the arguments to the constructor invocation, `Vs`, is indeed a list of values, which is another precondition to rule application. The repeated invocation of [`nth0`](http://www.swi-prolog.org/pldoc/man?predicate=nth0/3) selects from `Vs`, the list of values passed to the constructor of `C`, the one assigned to the field named `F_i` (where correspondence is via position `I`). `fields` is an auxiliary function defined in TAPL Fig. 19-2; note that it depends of the program `P` (which is always implicit in TAPL).
+Here, the head of the rule makes sure that it can only be applied to field accesses on constructor invocations, while the first subgoal makes sure that the arguments to the constructor invocation, `Vs`, is indeed a list of values, which is another precondition to rule application. The repeated invocation of [`nth0`](http://www.swi-prolog.org/pldoc/man?predicate=nth0/3) selects from `Vs`, the list of values passed to the constructor of `C`, the one assigned to the field named `F_i` (where correspondence is via position `I`). `fields` is the auxiliary function defined in TAPL Fig. 19-2 (see above); note that it depends of the program `P` (which is always implicit in TAPL).
 
-```prolog
+```prolo
 % E-InvkNew
 step(minvoc(new(C, Vs), M, Us), V, P) :-
     is_val(Vs), is_val(Us), !,
     mbody(M, C, P, (Xs, T_0)),
     substitute([this|Xs], [new(C, Vs)|Us], T_0, V).
+```
 
+Here,  `mbody`is the auxiliary function defined in TAPL Fig. 19-2 and `substitute` is another auxiliary predicate.
+
+```
 % E-CastNew
 step(cast(D, new(C, Vs)), new(C, Vs), P) :-
     is_val(Vs), !,
@@ -215,7 +258,7 @@ step(faccess(T_0, F), faccess(Tp_0, F), P) :-
     \+ is_val(T_0), !,
     eval(T_0, Tp_0, P).
     
-% E-Invk-Recv)
+% E-Invk-Recv
 step(minvoc(T_0, M, Ts), minvoc(Tp_0, M, Ts), P) :-
     \+ is_val(T_0), !,
     eval(T_0, Tp_0, P).
@@ -238,13 +281,25 @@ step(cast(C, T_0), cast(C, Tp_0), P) :-
 
 ## Typing
 
+### Original Typing Rules
+
+The typing rules of FJ are given in TAPL, Fig. 19-4:
+
 ![alt text](TAPL%20Fig.%2019-4.png "Typing")
 
-```prolog
+They make use of the auxiliary definitions provided by Fig. 19-2 (see above).
+
+The typing rules
+
+```
 % T-Var
 type(E, varaccess(X), C, _) :-
     memberchk(variable(C, X), E), !.
+```
 
+I somehow lost track of how E gets filled!
+
+```prolog
 % T-Field
 type(E, faccess(T0, Fi), Ci, P) :-
     type(E, T0, C0, P),
