@@ -208,11 +208,11 @@ Note that the proof of subtype(C, D, P) may recur infinitely if the subtype rela
 
 The evaluation rules of FJ are given in TAPL, Fig. 19-3:
 
-![alt text](TAPL%20Fig.%2019-3.png "Evaluation")
+![TAPL Fig. 19-3](TAPL%20Fig.%2019-3.png "Evaluation")
 
 They make use of the auxiliary definitions provided by Fig. 19-2 (which are also used by the typing rules; see below):
 
-![alt text](TAPL%20Fig.%2019-2.png "Auxiliary")
+![TAPL Fig. 19-3](TAPL%20Fig.%2019-2.png "Auxiliary")
 
 The evaluation rules adhere to a small-step style, meaning that they are repeatedly applied until a value is produced or evaluation gets stuck. 
 
@@ -296,7 +296,7 @@ step(cast(C, T_0), cast(C, Tp_0), P) :-
 
 The typing rules of FJ are given in TAPL, Fig. 19-4:
 
-![alt text](TAPL%20Fig.%2019-4.png "Typing")
+![TAPL Fig. 19-4](TAPL%20Fig.%2019-4.png "Typing")
 
 They make use of the auxiliary definitions provided by Fig. 19-2 (see above).
 
@@ -354,7 +354,7 @@ type(E, [T|Ts], [C|Cs], P) :-
     type(E, T, C, P),
     type(E, Ts, Cs, P).
 
-% Method Typing *
+% Method Typing
 ok(method(C0, M, Xs, T0), C, P) :-
     findall(Ci, member(field(Ci, _), Xs), Cs),
     type([variable(C, this)|Xs], T0, E0, P),
@@ -365,7 +365,7 @@ ok(method(C0, M, Xs, T0), C, P) :-
 % swap arguments to enable lifting over lists of methods using maplist
 ok4all(C, P, M) :- ok(M, C, P).
 
-% Class Typing *
+% Class Typing
 ok(class(C, D, Fs, K, Ms), P) :-
     C \= D, \+ subtype(D, C, P), % anti-symmetry; not in TAPL, Fig. 19-4
     findall(init(F, F), member(field(_, F), Fs), Is), % TBD: init(F, F) corresponds to?
@@ -379,7 +379,7 @@ ok(class(C, D, Fs, K, Ms), P) :-
 % swap arguments to enable lifting over lists of classes using maplist
 ok4all(P, C) :- ok(C, P).
 
-% Program Typing *
+% Program Typing
 ok(P) :-
     P = program(Cs),
     maplist(ok4all(P), Cs).
@@ -394,3 +394,5 @@ Please vote: Should I try to introduce operators like '|-' and use ':' to make t
 Please vote: Should I introduce additional auxiliary functions to implement metavariable binding in the inference rules (e.g., use something like value_of_field_i(...) rather than nth0(...), nth0(...) in E-ProjNew)?
 
 @Ralf: Your experience with supporting type safety arguments by analyzing the above rules from within Prolog would be greatly appreciated!
+
+@Vadim: can I have an overline, please?
