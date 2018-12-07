@@ -13,7 +13,21 @@ The work was partly motivated by Guy Steele's talk ["It’s Time for a New Old L
 
 The syntax of FJ is given in TAPL, Fig. 19-1, left:
 
-%FIXME:(include figure here)
+```
+CL ::= class C extends C {$~C~$ $~f~$; K $~M~$}
+
+K  ::= C($~C~$ $~f~$) {super($~f~$); this.$~f~$=$~f~$;}
+
+M  ::= C m($~C~$ $~x~$) {return t;}
+
+t  ::= x
+     | t.f
+     | t.m($~t~$)
+     | new C($~t~$)
+     | (C) t
+
+v  ::= new C($~v~$)
+```
 
 Note that the grammar uses nonterminals, or *metavariables*, that have no rules (namely *C*, *f*, and *m*); they expand to (or represent) identifiers (of classes, fields, and methods, resp.).
 
