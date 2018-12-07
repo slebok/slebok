@@ -19,7 +19,7 @@ Note that the grammar uses nonterminals, or *metavariables*, that have no rules 
 
 Here is a number of findings:
 
-1. The overline notation replaces for the %LINKME:Kleene star found in other grammar specification languages, subject to conventions that, were they not detailed in the accompanying text, would need to be reconstructed from a more precise syntax specification of Java. That is, the grammar as is can only be interpreted using extra knowledge; alone it is insufficient to drive a parser.
+1. The overline notation replaces for the %LINKME:Kleene star found in other grammar specification languages, subject to conventions that, were they not detailed in the accompanying text, would need to be reconstructed from a more precise syntax specification of FJ. That is, the grammar as is can only be interpreted using extra knowledge, and therefore is insufficient to drive a standard parser generator.
 2. Multiple occurrences of the same metavariable in the same rule may expand to different strings. For instance, the two occurrences of *C* in "class *C* extends *C*" may expand to (and represent) different class names. This can be concluded from assuming that metavariables take the role of the nonterminals of a @Vadim%LINKME:CFG.
 3. The grammar for terms is left recursive; also, the left associativity of member access requires attention.
 4. The term sublanguage does not introduce parentheses, even though these are required for member access on cast expressions.
@@ -27,9 +27,9 @@ Here is a number of findings:
 
 All findings are justified by the primary use of the grammar: providing an inductive definition of the language (or, rather, its syntax trees) suited to serve the evaluation and typing rules. 
 
-### Syntax and Parser in Prolog
+### Prological Syntax and Parser
 
-A grammar specification that is also suitable for parsing is reconstructed as a Definite Clause Grammar (DCG) in Prolog as follows:
+A grammar specification that is also suitable for parsing is reconstructed as a Definite Clause Grammar (DCG) in Prolog as follows.
 
 ```prolog
 'P'(program(P)) --> repeating('CL'(P)).
@@ -170,10 +170,10 @@ The subtype relation defined by an FJ program is specified by its `extends` clau
 
 The subtype relation is extracted from a program using the rules given in TAPL, Fig. 19-1, right. My observations:
 
-1. The first rule, a fact (or axiom), states reflexivity of the subtype relation. It uses a metavariable *C* that is not linked to a concrete program. Differing from the syntax specification in Fig.19-1, left, here the two occurrences of *C* stand for the same identifier (class name).
+1. The first rule, a fact (or axiom), states reflexivity of the subtype relation. It uses a metavariable *C* that is not linked to a concrete program. Differing from the syntax specification in Fig.19-1, left, here the two occurrences of the metavariable *C* stand for the same identifier (class name).
 2. The second rule states transitivity of the subtype relation. The metavariables *C*, *D*, and *E* stand for different class names in the general case; it is unclear whether the rule covers the cases that two or all three are the same.
 3. The third rule relates the subtype relation to a program. Again, it is unclear whether *C* and *D* stand for strictly different class names.
-4. There is no rule stating the antisymmetry required for a subtype relation.
+4. There is no rule stating the antisymmetry required for a subtype relation proper.
 
 ### Implementation in Prolog
 
@@ -189,7 +189,7 @@ subtype(C, D, P) :-
 
 @{Ralf, Vadim}%CHECKME: Any idea how to make Prolog reflect the original specification more directly?
 
-Note that the logic variables `C`, `D`, and `E` may be instantiated with the same class name.
+Note that the logic variables `C`, `D`, and `E` may be instantiated with the same class name. That is, the rules are a materialization of the assumption that *C*, *D*, and *E* in Fig. 19-1, right, may represent the same identifier.
 
 ```prolog
 subtype([], [], _).
@@ -200,13 +200,13 @@ subtype([C|Cs], [D|Ds], P) :-
 
 %CHECKME: the extension to lists of types (required where?) needs to be made explicit.
 
-Note that the proof of subtype(C, D, P) may recur infinitely if the subtype relation is circular and hence not antisymmetric.
+Note that the proof of `subtype(C, D, P)` may recur infinitely if the subtype relation is circular and hence not antisymmetric.
 
 ## Evaluation
 
 ### Original Evaluation Rules
 
-The evaluation rules of FJ are given in TAPL, Fig. 19-3:
+The evaluation rules of FJ are given in Fig. 19-3 of TAPL:
 
 ![TAPL Fig. 19-3](TAPL%20Fig.%2019-3.png "Evaluation")
 
@@ -218,13 +218,13 @@ The evaluation rules adhere to a small-step style, meaning that they are repeate
 
 Again, there are some observations to be made:
 
-1. Unlike for the syntax specification, multiple occurrences of the same metavariable in the same rule represent the same (meta)term. @Ralf%CHECKME: other word for metaterm? Note that "term" is ambiguous here, since TAPL uses it for expressions.
-2. The metavariables denoted by *t* overline etc. are implicitly indexed with indices ranging from 1 to *n*; the use of the same index *i* means that metavariables are selected from the same position of the corresponding sequences. Note that this presupposes that the sequences are of the same length, which may, but need not be, guaranteed by the syntax rules of FJ (it is only guaranteed where to sequences are accepted as a list of pairs).
+1. Unlike for the syntax specification, multiple occurrences of the same metavariable in the same rule represent the same (meta)term. @Ralf%CHECKME: other word for metaterm? Note that "term" is ambiguous here, since TAPL uses it for expressions. This can be concluded from %FIXME: what? It follows that metavariables now correspond directly to logic variables.
+2. The metavariables denoted by *t* overline etc. are implicitly indexed with indices ranging from 1 to *n*; the use of the same index *i* means that metavariables are selected from the same position of the corresponding sequences. Note that this presupposes that the sequences are of the same length, which may, but need not be, guaranteed by the syntax rules of FJ (it is only guaranteed where two sequences are accepted by the grammar as a list of pairs; e.g.: *C* overline *x* overline, which is accepted as `[variable(C, X)]`).
 3. The rules and their order specify the evaluation order of subterms. For instance, for a term *t* = *t*_0.*m*(*t*_1, *t*_2), the evaluation order of the subterms *t*_0 through *t*_2 is from left to right. 
 
 ## Translation of Evaluation Rules to Prolog
 
-The evaluation loop is implemented by the Prolog clause
+The evaluation loop (implicit in TAPL) is implemented by the Prolog predicate
 
 ```prolog
 eval(T, T, _) :- is_val(T), !. % term is ground -> the term is the value!
@@ -233,7 +233,7 @@ eval(T, V, P) :-
     eval(Tp, V, P).
 ```
 
-where `is_val(T)` calls [`phrase(v(T), _)`](http://www.swi-prolog.org/pldoc/doc_for?object=phrase/2) either directly or lifts it over the members of `T` if `T` is a list, to check that the term `T` represents a value (@Ralf%CHECKME: Do we not have a metatyping problem here? Is T not *either* a term *or* a value?). The third argument `P` of `eval` holds the program in whose context the term `T` is evaluated to the value `V`.  Note that the evaluation loop terminates successfully when the input term has been reduced to a value, and fails when it reaches a term that is not a value and cannot be reduced by a next step.
+where `is_val(T)` calls [`phrase(v(T), _)`](http://www.swi-prolog.org/pldoc/doc_for?object=phrase/2) either directly or lifts it over the members of `T` if `T` is a list, to check that the term `T` represents a value (@Ralf%CHECKME: Do we not have a metatyping problem here? Is T not *either* a term *or* a value?). The third argument `P` of `eval` holds the program in whose context the term `T` is evaluated to the value `V`.  Note that the evaluation loop terminates successfully when the input term has been reduced to a value, and fails when it arrives at a term that, although it is not a value, cannot be reduced further.
 
 The evaluation rules themselves are implemented as follows.
 
@@ -246,7 +246,7 @@ step(faccess(new(C, Vs), F_i), V_i, P) :-
     nth0(I, Vs, V_i).
 ```
 
-Here, the head of the rule makes sure that it can only be applied to field accesses on constructor invocations, while the first subgoal makes sure that the arguments to the constructor invocation, `Vs`, is indeed a list of values, which is another precondition to rule application. The repeated invocation of [`nth0`](http://www.swi-prolog.org/pldoc/man?predicate=nth0/3) selects from `Vs`, the list of values passed to the constructor of `C`, the one assigned to the field named `F_i` (where correspondence is via position `I`). `fields` is the auxiliary function defined in TAPL Fig. 19-2 (see above); note that it depends of the program `P` (which is always implicit in TAPL).
+Here, the head of the rule makes sure that it can only be applied to field accesses on constructor invocations, while the first subgoal makes sure that the argument to the constructor invocation, `Vs`, is indeed a list of values, which is another precondition to rule application. The repeated invocation of [`nth0`](http://www.swi-prolog.org/pldoc/man?predicate=nth0/3) selects from `Vs`, the list of values passed to the constructor of `C`, the one assigned to the field named `F_i` (where correspondence is via position `I`). `fields` is the auxiliary function defined in TAPL Fig. 19-2 (see above); note that it depends of the program `P` (which is always implicit in TAPL).
 
 ```prolo
 % E-InvkNew
