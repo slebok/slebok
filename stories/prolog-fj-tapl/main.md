@@ -20,7 +20,7 @@ Note that the grammar uses nonterminals, or *metavariables*, that have no rules 
 Here is a number of findings:
 
 1. The overline notation replaces for the %LINKME:Kleene star found in other grammar specification languages, subject to conventions that, were they not detailed in the accompanying text, would need to be reconstructed from a more precise syntax specification of Java. That is, the grammar as is can only be interpreted using extra knowledge; alone it is insufficient to drive a parser.
-2. Multiple occurrences of the same metavariable in the same rule may expand to different terminals. For instance, the two occurrences of *C* in "class *C* extends *C*" may expand to (and represent) different class names. (In Fig. 19-1, metavariables are like nonterminals in this respect.)
+2. Multiple occurrences of the same metavariable in the same rule may expand to different strings. For instance, the two occurrences of *C* in "class *C* extends *C*" may expand to (and represent) different class names. This can be concluded from assuming that metavariables take the role of the nonterminals of a @Vadim%LINKME:CFG.
 3. The grammar for terms is left recursive; also, the left associativity of member access requires attention.
 4. The term sublanguage does not introduce parentheses, even though these are required for member access on cast expressions.
 5. Fig. 19-1 really specifies two grammars, one for programs (including terms) and one for values. The language of values is a sublanguage of the language of terms in the sense that all values are also terms syntactically.
@@ -29,7 +29,7 @@ All findings are justified by the primary use of the grammar: providing an induc
 
 ### Syntax and Parser in Prolog
 
-A grammar that is also suitable for parsing is reconstructed as a Definite Clause Grammar (DCG) in Prolog as follows:
+A grammar specification that is also suitable for parsing is reconstructed as a Definite Clause Grammar (DCG) in Prolog as follows:
 
 ```prolog
 'P'(program(P)) --> repeating('CL'(P)).
@@ -45,7 +45,7 @@ This (start) rule is implicit in TAPL. The (non-ground) term `program(P)` that i
     identifier(D), % superclass name; 'C' in the original grammar!
     symbol("{"),
     repeating('F'(F)), % field declarations
-    'K'(K), % constructor
+    'K'(K), % konstructor
     repeating('M'(M)), % method definitions
     symbol("}").
     
@@ -55,7 +55,7 @@ This (start) rule is implicit in TAPL. The (non-ground) term `program(P)` that i
     symbol(";").
 ```
 
-The metavariable *C* from the original grammar (where it represents class names) translates to a logic variable. Deviating from what the original grammar seems to suggest, different logic variables `C` and `D` are introduced for the two occurrences of *C* in the original grammar. This is necessary because unlike for a metavariable in the syntax specification, multiple occurrences of a logic variable in the same rule express equality of whatever gets substituted for them. The rule *'CL'* also introduces a new non-terminal `'F'`, which is required so as to be able to use the metapredicate `repeating` for accepting sequences of field declarations.
+The metavariable *C* from the original grammar (where it represents class names) translates to a logic variable. Deviating from what the original grammar seems to suggest, different logic variables `C` and `D` are introduced for the two occurrences of *C* in the original grammar. This is necessary because unlike for a metavariable in the syntax specification, multiple occurrences of a logic variable in the same rule express equality of whatever gets substituted for them. The rule `'CL'` also introduces a new non-terminal `'F'`, which is required so as to be able to use the metapredicate `repeating` for accepting sequences of field declarations.
 
 ```prolog
 'K'(constructor(C, X, SF, TF)) -->
@@ -299,6 +299,8 @@ The typing rules of FJ are given in TAPL, Fig. 19-4:
 ![TAPL Fig. 19-4](TAPL%20Fig.%2019-4.png "Typing")
 
 They make use of the auxiliary definitions provided by Fig. 19-2 (see above).
+
+1. The environment is lean: It is comprised of the formals of a method, plus the variable *this*. The program, i.e., the environment for class (or type), field and method lookup, is implicit. (%CHECKME: how is this required for typing?)
 
 The typing rules
 
