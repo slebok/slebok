@@ -1,11 +1,11 @@
 # A Prological Reconstruction of Featherweight Java from TAPL
 
-This is the story of how I naively reconstructed a parser, evaluator and type checker for Featherweight Java (FJ) from Benjamin Pierce's book %LINKME:"Types and Programming Languages" (TAPL), Sect. 19, in [Prolog](../tools/Prolog.md) ([SWI-Prolog](http://www.swi-prolog.org/pldoc/man?predicate=select/4), to be precise). The insights of this story, if any, come from observing
+This is the story of how I naively reconstructed a $@parser@$, $@evaluator@$ and $@typechecker@$ for $@Featherweight Java@$ (FJ) from $[Benjamin Pierce](bibtex:person/Benjamin_C_Pierce)$'s book %LINKME:"Types and Programming Languages" (TAPL), Sect. 19, in $@Prolog@$ ([SWI-Prolog](http://www.swi-prolog.org/pldoc/man?predicate=select/4), to be precise). The insights of this story, if any, come from observing
 
 1. how the implementation reconstructs the semantics of the book's figures' specifying syntax and semantics of FJ, and 
 2. how and why the implementation differs from the specifications.
 
-The work was partly motivated by Guy Steele's talk ["It’s Time for a New Old Language"](https://www.youtube.com/watch?v=dCuZkaaou0Q).
+The work was partly motivated by $[Guy Steele](bibtex:person/Guy_L_Steele_Jr)$'s talk ["It’s Time for a New Old Language"](https://www.youtube.com/watch?v=dCuZkaaou0Q).
 
 ## Syntax and Parser
 
@@ -29,13 +29,13 @@ t  ::= x
 v  ::= new C($~v~$)
 ```
 
-Note that the grammar uses nonterminals, or *metavariables*, that have no rules (namely *C*, *f*, and *m*); they expand to (or represent) identifiers (of classes, fields, and methods, resp.).
+Note that the grammar uses $@nonterminals@nonterminal symbol$, or *metavariables*, that have no rules (namely *C*, *f*, and *m*); they expand to (or represent) identifiers (of classes, fields, and methods, resp.).
 
 Here is a number of findings:
 
-1. The overline notation replaces for the %LINKME:Kleene star found in other grammar specification languages, subject to conventions that, were they not detailed in the accompanying text, would need to be reconstructed from a more precise syntax specification of FJ. That is, the grammar as is can only be interpreted using extra knowledge, and therefore is insufficient to drive a standard parser generator.
-2. Multiple occurrences of the same metavariable in the same rule may expand to different strings. For instance, the two occurrences of *C* in "class *C* extends *C*" may expand to (and represent) different class names. This can be concluded from assuming that metavariables take the role of the nonterminals of a @Vadim%LINKME:CFG.
-3. The grammar for terms is left recursive; also, the left associativity of member access requires attention.
+1. The overline notation replaces for the $@Kleene star@Kleene_closure$ found in other grammar specification languages, subject to conventions that, were they not detailed in the accompanying text, would need to be reconstructed from a more precise syntax specification of FJ. That is, the grammar as is can only be interpreted using extra knowledge, and therefore is insufficient to drive a standard $@parser generator@$.
+2. Multiple occurrences of the same metavariable in the same rule may expand to different strings. For instance, the two occurrences of *C* in "`class C extends C`" may expand to (and represent) different class names. This can be concluded from assuming that metavariables take the role of the nonterminals of a $@CFG@context-free_grammar$.
+3. The grammar for terms is $@left recursive@left recursion$; also, the $@left associativity@$ of member access requires attention.
 4. The term sublanguage does not introduce parentheses, even though these are required for member access on cast expressions.
 5. Fig. 19-1 really specifies two grammars, one for programs (including terms) and one for values. The language of values is a sublanguage of the language of terms in the sense that all values are also terms syntactically.
 
@@ -43,7 +43,7 @@ All findings are justified by the primary use of the grammar: providing an induc
 
 ### Prological Syntax and Parser
 
-A grammar specification that is also suitable for parsing is reconstructed as a Definite Clause Grammar (DCG) in Prolog as follows.
+A grammar specification that is also suitable for parsing is reconstructed as a $@Definite Clause Grammar@definite clause grammar$ (DCG) in Prolog as follows.
 
 ```prolog
 'P'(program(P)) --> repeating('CL'(P)).
