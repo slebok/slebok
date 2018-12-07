@@ -262,7 +262,7 @@ step(faccess(new(C, Vs), F_i), V_i, P) :-
 
 Here, the head of the rule makes sure that it can only be applied to field accesses on constructor invocations, while the first subgoal makes sure that the argument to the constructor invocation, `Vs`, is indeed a list of values, which is another precondition to rule application. The repeated invocation of [`nth0`](http://www.swi-prolog.org/pldoc/man?predicate=nth0/3) selects from `Vs`, the list of values passed to the constructor of `C`, the one assigned to the field named `F_i` (where correspondence is via position `I`). `fields` is the auxiliary function defined in TAPL Fig. 19-2 (see above); note that it depends of the program `P` (which is always implicit in TAPL).
 
-```prolo
+```prolog
 % E-InvkNew
 step(minvoc(new(C, Vs), M, Us), V, P) :-
     is_val(Vs), is_val(Us), !,
