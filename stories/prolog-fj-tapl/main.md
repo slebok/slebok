@@ -95,7 +95,7 @@ init(init(F, X)) -->
     keyword(";").
 ```
 
-The rule for constructors (`'K'`) uses a variant of `repeating` specifying a separator. The new nonterminal `init` was introduced for the same reason as `'F'` above; note that, unlike the original grammar, it binds to the variable `TF` a list of pairs (where the original grammar binds a pair of lists to two metavariables *f* overlined).
+The rule for constructors (`'K'`) uses a variant of `repeating` specifying a separator. The new nonterminal `init` was introduced for the same reason as `'F'` above; note that, unlike the original grammar, it binds to the variable `TF` a list of pairs (where the original grammar binds a pair of lists to two metavariables *$~f~$*).
 
 ```prolog
 'M'(method(C, M, X, T)) -->
@@ -222,18 +222,50 @@ Note that the proof of `subtype(C, D, P)` may recur infinitely if the subtype re
 
 The evaluation rules of FJ are given in Fig. 19-3 of TAPL:
 
-![TAPL Fig. 19-3](TAPL%20Fig.%2019-3.png "Evaluation")
+```
+   $/fields/$(C) = $~C~$ $~f~$
+—————————————————————— (E-ProjNew)
+  (new C($~v~$)).f$_i_$ --> v$_i_$  
+
+            $/mbody/$(m,C) = ($~x~$, t$_0_$)
+———————————————————————————————————————————————— (E-InvkNew)
+(new C($~v~$)).m($~u~$) --> [$~x~$ |-> $~u~$, this |-> new C($~v~$)] t$_0_$
+
+        C <: D
+———————————————————————— (E-CastNew)
+(D)(new C($~v~$)) --> new C($~v~$)
+
+  t$_0_$ --> t'$_0_$
+———————————— (E-Field)
+t$_0_$.f --> t'$_0_$.f
+
+      t$_0_$ --> t'$_0_$
+——————————————————— (E-Invk-Recv)
+t$_0_$.m($~t~$) --> t'$_0_$.m($~t~$)
+
+         t$_i_$ --> t'$_i_$
+———————————————————————————————— (E-Invk-Arg)
+v$_0_$.m($~v~$, t$_i_$, $~t~$) --> v$_0_$.m($~v~$, t'$_i_$, $~t~$)
+
+          t$_i_$ --> t'$_i_$
+—————————————————————————————————— (E-New-Arg)
+new C($~v~$, t$_i_$, $~t~$) --> new C($~v~$, t'$_i_$, $~t~$)
+
+  t$_0_$ --> t'$_0_$
+———————————— (E-Cast)
+(C)t$_0_$ --> (C)t'$_0_$
+```
 
 They make use of the auxiliary definitions provided by Fig. 19-2 (which are also used by the typing rules; see below):
 
-![TAPL Fig. 19-3](TAPL%20Fig.%2019-2.png "Auxiliary")
+![TAPL Fig. 19-2](TAPL%20Fig.%2019-2.png "Auxiliary")
 
 The evaluation rules adhere to a small-step style, meaning that they are repeatedly applied until a value is produced or evaluation gets stuck. 
 
 Again, there are some observations to be made:
 
 1. Unlike for the syntax specification, multiple occurrences of the same metavariable in the same rule represent the same (meta)term. @Ralf%CHECKME: other word for metaterm? Note that "term" is ambiguous here, since TAPL uses it for expressions. This can be concluded from %FIXME: what? It follows that metavariables now correspond directly to logic variables.
-2. The metavariables denoted by *t* overline etc. are implicitly indexed with indices ranging from 1 to *n*; the use of the same index *i* means that metavariables are selected from the same position of the corresponding sequences. Note that this presupposes that the sequences are of the same length, which may, but need not be, guaranteed by the syntax rules of FJ (it is only guaranteed where two sequences are accepted by the grammar as a list of pairs; e.g.: *C* overline *x* overline, which is accepted as `[variable(C, X)]`).
+2. The metavariables denoted by *$~t~$* etc. are implicitly indexed with indices ranging from 1 to *n*; the use of the same index *i* means that metavariables are selected from the same position of the corresponding sequences. Note that this presupposes that the sequences are of the same length, which may, but need not be, guaranteed by the syntax rules of FJ (it is only guaranteed where two sequences are accepted by the grammar as a list of pairs; e.g.: *$~C~$* *$~x~$*, which is accepted as `[variable(C, X)]`).
 3. The rules and their order specify the evaluation order of subterms. For instance, for a term *t* = *t*_0.*m*(*t*_1, *t*_2), the evaluation order of the subterms *t*_0 through *t*_2 is from left to right. 
 
 ## Translation of Evaluation Rules to Prolog
@@ -270,9 +302,9 @@ step(minvoc(new(C, Vs), M, Us), V, P) :-
     substitute([this|Xs], [new(C, Vs)|Us], T_0, V).
 ```
 
-Here,  `mbody`is the auxiliary function defined in TAPL Fig. 19-2 and `substitute` is another auxiliary predicate.
+Here,  `mbody` is the auxiliary function defined in TAPL Fig. 19-2 and `substitute` is another auxiliary predicate.
 
-```
+```prolog
 % E-CastNew
 step(cast(D, new(C, Vs)), new(C, Vs), P) :-
     is_val(Vs), !,
@@ -318,7 +350,7 @@ They make use of the auxiliary definitions provided by Fig. 19-2 (see above).
 
 The typing rules
 
-```
+```prolog
 % T-Var
 type(E, varaccess(X), C, _) :-
     memberchk(variable(C, X), E), !.
