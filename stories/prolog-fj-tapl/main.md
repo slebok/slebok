@@ -31,14 +31,14 @@ t  ::= x
 v  ::= new C($~v~$)
 ```
 
-Note that the grammar uses $@nonterminals@nonterminal symbol$, or *metavariables*, that have no rules (namely *C*, *f*, and *m*); they expand to (or represent) identifiers (of classes, fields, and methods, resp.).
+Note that the grammar uses $@nonterminals@nonterminal symbol$, or *metavariables*, without production rules (namely *C*, *f*, and *m*); they expand to (or represent) identifiers (of classes, fields, and methods, resp.).
 
 Here is a number of findings:
 
 1. The overline notation replaces for the $@Kleene star@Kleene_closure$ found in other grammar specification languages, subject to conventions that, were they not detailed in the accompanying text, would need to be reconstructed from a more precise syntax specification of FJ. That is, the grammar as is can only be interpreted using extra knowledge, and therefore is insufficient to drive a standard $@parser generator@$.
-2. Multiple occurrences of the same metavariable in the same rule may expand to different strings. For instance, the two occurrences of *C* in "`class C extends C`" may expand to (and represent) different class names. This can be concluded from assuming that metavariables take the role of the nonterminals of a $@CFG@context-free_grammar$.
-3. The grammar for terms is $@left recursive@left recursion$; also, the $@left associativity@$ of member access requires attention.
-4. The term sublanguage does not introduce parentheses, even though these are required for member access on cast expressions.
+2. In line with metavariables taking the place of nonterminaly, multiple occurrences of the same metavariable in the same rule may expand to different strings. For instance, the two occurrences of *C* in "`class C extends C`" may expand to (and represent) different class names. This means that the metavariables of the syntax can strictly not be equated with the logic variables of Prolog.
+3. Member access makes the grammar for terms $@left recursive@left recursion$; removal of left recursion needs to take into account the $@left associativity@$ of member access.
+4. The term sublanguage does not introduce parentheses, which are required for member access on cast expressions (as used as an example in TAPL).
 5. Fig. 19-1 really specifies two grammars, one for programs (including terms) and one for values. The language of values is a sublanguage of the language of terms in the sense that all values are also terms syntactically.
 
 All findings are justified by the primary use of the grammar: providing an inductive definition of the language (or, rather, its syntax trees) suited to serve the evaluation and typing rules. 
@@ -47,11 +47,15 @@ All findings are justified by the primary use of the grammar: providing an induc
 
 A grammar specification that is also suitable for parsing is reconstructed as a $@Definite Clause Grammar@definite clause grammar$ (DCG) in Prolog as follows.
 
+#### Start Rule
+
 ```prolog
 'P'(program(P)) --> repeating('CL'(P)).
 ```
 
 This (start) rule is implicit in TAPL. The (non-ground) term `program(P)` that is an argument to the start nonterminal `'P'` (quoted because in Prolog, unquoted identifiers starting with a capital letter are interpreted as variables) serves the construction of the syntax tree; the (root) node is a term of type `program`. (Unfortunately, Prolog is untyped and SWI-Prolog has no way of declaring structs.) `repeating` is a meta-predicate that implements the Kleene star for its argument, a nonterminal. In the above rule, it effects to `P` being unified with a list of nodes representing class definitions (possibly empty).
+
+#### Class Declarations
 
 ```prolog
 'CL'(class(C, D, F, K, M)) -->
@@ -71,7 +75,9 @@ This (start) rule is implicit in TAPL. The (non-ground) term `program(P)` that i
     symbol(";").
 ```
 
-The metavariable *C* from the original grammar (where it represents class names) translates to a logic variable. Deviating from what the original grammar seems to suggest, different logic variables `C` and `D` are introduced for the two occurrences of *C* in the original grammar. This is necessary because unlike for a metavariable in the syntax specification, multiple occurrences of a logic variable in the same rule express equality of whatever gets substituted for them. The rule `'CL'` also introduces a new non-terminal `'F'`, which is required so as to be able to use the metapredicate `repeating` for accepting sequences of field declarations.
+The metavariable $C$ from the original grammar (where it represents class names) translates to a logic variable needed to transfer the accepted identifier to the parse tree. Note that different logic variables `C` and `D` are introduced for the two occurrences of $C$ in the original grammar; this is necessary because unlike for a metavariable in the syntax specification, multiple occurrences of a logic variable in the same rule express equality of whatever gets substituted for them. The rule `'CL'` also introduces a new non-terminal `'F'`, which is required so as to be able to use the metapredicate `repeating` for accepting sequences of field declarations. Note that `repeating('F'(F))` instantiates `F` with a list of pairs `field(C, F)`, rather than a pair of list, as suggested by $~C~$ $~f~$ in the original grammar.
+
+#### Constructor Declarations
 
 ```prolog
 'K'(constructor(C, X, SF, TF)) -->
@@ -97,7 +103,9 @@ init(init(F, X)) -->
     keyword(";").
 ```
 
-The rule for constructors (`'K'`) uses a variant of `repeating` specifying a separator. The new nonterminal `init` was introduced for the same reason as `'F'` above; note that, unlike the original grammar, it binds to the variable `TF` a list of pairs (where the original grammar binds a pair of lists to two metavariables *$~f~$*).
+The rule for constructors (`'K'`) uses a variant of `repeating` specifying `,` as separator. The new nonterminal `init` was introduced for the same reason as `'F'` above.
+
+#### Method Declarations
 
 ```prolog
 'M'(method(C, M, X, T)) -->
@@ -117,7 +125,9 @@ variable(variable(C, X)) -->
     identifier(X). % variable name
 ```
 
-Again, a new nonterminal `variable` was introduced for the purpose of handling repetition.
+Again, a new nonterminal `variable` was introduced for the purpose of handling a repeating group.
+
+#### Terms
 
 ```prolog
 t(cast(C, T)) --> % cast
@@ -159,9 +169,11 @@ m(R, T) --> % method invocation
     m(minvoc(R, M, A), T).
 ```
 
-The grammar rule for terms required more elaborate reworking, to account for left recursion (removed by introducing `e`, for elementary terms), the left associativity of member access (catered for by spending a second argument on `m` (where the first builds up a possible chain of member accesses and the second returns it at the end of the chain). Also, I fitted in the parentheses for member access on cast expressions; @Vadim%CHECKME:I am not sure how this accounts for the parentheses used in the evaluation rules of TAPL.
+The grammar rule for terms required more elaborate reworking, to account for left recursion (removed by introducing `e`, for elementary terms) and the left associativity of member access (catered for by spending a second argument on `m` (where the first builds up a possible chain of member accesses and the second returns it at the end of the chain). @{Vadim,Ralf}%CHEKME: Is there a more elegant or standard way of dealing with this problem? Also, I fitted in the parentheses for member access on cast expressions; @Vadim%CHECKME:I am not sure how this accounts for the parentheses used in the evaluation rules of TAPL.
 
 Note that the parser uses backtracking, and that the grammar is unambiguous.
+
+#### Values
 
 ```prolog
 v(new(C, Vs)) -->
@@ -176,7 +188,7 @@ The rule for values is not used for parsing values (recall that the syntax of va
 
 ### Summary
 
-The primary purpose of the grammar as provided by Fig. 19-1 of TAPL is to hint at a specification of an abstract syntax of FJ, on which the specifications of Figs. 19-2 through 4 rely. The above DCG makes this specification explicit, by defining the term structures (in the arguments of the rule heads) from which syntax trees are constructed. The occurrences of the metavariables representing identifiers in Fig. 19-1 (not the metavariables themselves) translate to logic variables in the DCG rules, which serve to insert the accepted identifiers literally in the syntax tree; all other (occurrences of) metavariables of Fig. 19-1 translate to nonterminals of the DCG (Prolog goals and subgoals).
+The primary purpose of the grammar as provided by Fig. 19-1 of TAPL is to hint at a specification of an abstract syntax of FJ, on which the specifications of Figs. 19-2 through 4 rely. The above DCG makes this specification explicit, by defining the term structures (in the arguments of the rule heads) from which syntax trees are constructed. The *occurrences of* the metavariables (not the metavariables themselves) representing identifiers in Fig. 19-1 (i.e., the ones without production rules) translate to logic variables in the DCG rules, which serve to insert the accepted identifiers literally in the syntax tree; all other (occurrences of) metavariables of Fig. 19-1 translate to nonterminals of the DCG (Prolog goals and subgoals).
 
 ## Extracting the Subtype Relation
 
@@ -186,9 +198,11 @@ The subtype relation defined by an FJ program is specified by its `extends` clau
 
 The subtype relation is extracted from a program using the rules given in TAPL, Fig. 19-1, right. My observations:
 
-1. The first rule, a fact (or axiom), states reflexivity of the subtype relation. It uses a metavariable *C* that is not linked to a concrete program. Differing from the syntax specification in Fig.19-1, left, here the two occurrences of the metavariable *C* stand for the same identifier (class name).
-2. The second rule states transitivity of the subtype relation. The metavariables *C*, *D*, and *E* stand for different class names in the general case; it is unclear whether the rule covers the cases that two or all three are the same.
-3. The third rule relates the subtype relation to a program. Again, it is unclear whether *C* and *D* stand for strictly different class names.
+@Vadim: If the original Figures are to be dropped, then we would need a transcription here.
+
+1. The first rule, a fact (or axiom), states reflexivity of the subtype relation. It uses a metavariable $C$ that is not linked to a concrete program. Differing from the syntax specification in Fig.19-1, left, here the two occurrences of the metavariable $C$ stand for the same identifier (class name).
+2. The second rule states transitivity of the subtype relation. The metavariables $C$, $D$, and $E$ stand for different class names in the general case; it is unclear whether the rule covers the cases that two or all three are the same.
+3. The third rule relates the subtype relation to a program. Again, it is unclear whether $C$ and $D$ stand for strictly different class names.
 4. There is no rule stating the antisymmetry required for a subtype relation proper.
 
 ### Implementation in Prolog
@@ -203,9 +217,13 @@ subtype(C, D, P) :-
     subtype(E, D, P).
 ```
 
+Note that the proof of `subtype(C, D, P)` may recur infinitely if the subtype relation is circular (not antisymmetric).
+
 @{Ralf, Vadim}%CHECKME: Any idea how to make Prolog reflect the original specification more directly?
 
 Note that the logic variables `C`, `D`, and `E` may be instantiated with the same class name. That is, the rules are a materialization of the assumption that *C*, *D*, and *E* in Fig. 19-1, right, may represent the same identifier.
+
+Some of the typing rules of Fig. 19-4 in TAPL require an extension of the subtype relation to lists of types (e.g., $~C~$ <: $~D~$). This is covered in Prolog by 
 
 ```prolog
 subtype([], [], _).
@@ -213,10 +231,6 @@ subtype([C|Cs], [D|Ds], P) :-
     subtype(C, D, P),
     subtype(Cs, Ds, P).
 ```
-
-%CHECKME: the extension to lists of types (required where?) needs to be made explicit.
-
-Note that the proof of `subtype(C, D, P)` may recur infinitely if the subtype relation is circular and hence not antisymmetric.
 
 ## Evaluation
 
@@ -269,7 +283,7 @@ The evaluation rules adhere to a small-step style, meaning that they are repeate
 
 Again, there are some observations to be made:
 
-1. Unlike for the syntax specification, multiple occurrences of the same metavariable in the same rule represent the same (meta)term. @Ralf%CHECKME: other word for metaterm? Note that "term" is ambiguous here, since TAPL uses it for expressions. This can be concluded from %FIXME: what? It follows that metavariables now correspond directly to logic variables.
+1. Unlike for the syntax specification, multiple occurrences of the same metavariable in the same rule represent the same (meta)term (note that this holds for metavariables representing identifiers and nonterminals proper alike). @Ralf%CHECKME: other word for metaterm? Note that "term" is ambiguous here, since TAPL uses it for expressions. It follows that in Figure 19-2, all metavariables correspond directly to logic variables.
 2. The metavariables denoted by *$~t~$* etc. are implicitly indexed with indices ranging from 1 to *n*; the use of the same index *i* means that metavariables are selected from the same position of the corresponding sequences. Note that this presupposes that the sequences are of the same length, which may, but need not be, guaranteed by the syntax rules of FJ (it is only guaranteed where two sequences are accepted by the grammar as a list of pairs; e.g.: *$~C~$* *$~x~$*, which is accepted as `[variable(C, X)]`).
 3. The rules and their order specify the evaluation order of subterms. For instance, for a term *t* = *t*_0.*m*(*t*_1, *t*_2), the evaluation order of the subterms *t*_0 through *t*_2 is from left to right. 
 
@@ -293,11 +307,11 @@ The evaluation rules themselves are implemented as follows.
 step(faccess(new(C, Vs), F_i), V_i, P) :-
     is_val(Vs), !,
     fields(C, P, Fs),
-    nth0(I, Fs, field(_, F_i)),
-    nth0(I, Vs, V_i).
+    nth1(I, Fs, field(_, F_i)),
+    nth1(I, Vs, V_i).
 ```
 
-Here, the head of the rule makes sure that it can only be applied to field accesses on constructor invocations, while the first subgoal makes sure that the argument to the constructor invocation, `Vs`, is indeed a list of values, which is another precondition to rule application. The repeated invocation of [`nth0`](http://www.swi-prolog.org/pldoc/man?predicate=nth0/3) selects from `Vs`, the list of values passed to the constructor of `C`, the one assigned to the field named `F_i` (where correspondence is via position `I`). `fields` is the auxiliary function defined in TAPL Fig. 19-2 (see above); note that it depends of the program `P` (which is always implicit in TAPL).
+Here, the head of the rule makes sure that it can only be applied to field accesses on constructor invocations, while the first subgoal makes sure that the argument to the constructor invocation, `Vs`, is indeed a list of values, which is another precondition to rule application. The repeated invocation of [`nth1`](http://www.swi-prolog.org/pldoc/man?predicate=nth1/3) selects from `Vs`, the list of values passed to the constructor of `C`, the one assigned to the field named `F_i` (where correspondence is via position `I`). `fields` is the auxiliary function defined in TAPL Fig. 19-2 (see above); note that it depends of the program `P` (which is always implicit in TAPL).
 
 ```prolog
 % E-InvkNew
