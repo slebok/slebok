@@ -13,6 +13,8 @@ The work was partly motivated by $[Guy Steele](bibtex:person/Guy_L_Steele_Jr)$'s
 
 The syntax of FJ is given in TAPL, Fig. 19-1, left:
 
+![TAPL Fig. 19-1](TAPL%20Fig.%2019-1.png "Syntax and Subtyping")
+
 ```
 CL ::= class C extends C {$~C~$ $~f~$; K $~M~$}
 
@@ -221,6 +223,9 @@ Note that the proof of `subtype(C, D, P)` may recur infinitely if the subtype re
 ### Original Evaluation Rules
 
 The evaluation rules of FJ are given in Fig. 19-3 of TAPL:
+
+![TAPL Fig. 19-3](TAPL%20Fig.%2019-3.png "Evaluation")
+
 
 ```
    $/fields/$(C) = $~C~$ $~f~$
