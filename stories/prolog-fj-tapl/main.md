@@ -2,7 +2,7 @@
 
 This is the story of how I naively reconstructed a $@parser@$, $@evaluator@$ and $@typechecker@$ for $@Featherweight Java@$ (FJ) from $[Benjamin Pierce](bibtex:person/Benjamin_C_Pierce)$'s book %LINKME:"Types and Programming Languages" (TAPL), Sect. 19, in $@Prolog@$ ([SWI-Prolog](http://www.swi-prolog.org/pldoc/man?predicate=select/4), to be precise). The insights of this story, if any, come from observing
 
-1. how the implementation reconstructs the semantics of the book's figures' specifying syntax and semantics of FJ, and 
+1. how the implementation reconstructs the semantics of the book's figures specifying the syntax and semantics of FJ, and 
 2. how and why the implementation differs from the specifications.
 
 The work was partly motivated by $[Guy Steele](bibtex:person/Guy_L_Steele_Jr)$'s talk ["It’s Time for a New Old Language"](https://www.youtube.com/watch?v=dCuZkaaou0Q).
