@@ -391,7 +391,7 @@ trivial
 
 ### Summary
 
-The translation of the evaluation rules to Prolog is mostly trivial, especially given that the original evaluation procedure assumes an SLD-like semantics. The helper predicates make some of the implicitness in the original notation explicit.
+The translation of the evaluation rules to Prolog is mostly straightforward, especially given that the original evaluation procedure assumes an SLD resolution like approach. The helper predicates make some of the implicitness in the original notation explicit. The distinction of values and terms is made explicit. @Ralf%CHECKME: Unclear to me whether terms and values are sufficiently separated in the original capture.
 
 ## Typing
 
@@ -403,24 +403,41 @@ The typing rules of FJ are given in TAPL, Fig. 19-4:
 
 They make use of the auxiliary definitions provided by Fig. 19-2 (see above).
 
-1. The environment is lean: It is comprised of the formals of a method, plus the variable *this*. The program, i.e., the environment for class (or type), field and method lookup, is implicit. (%CHECKME: how is this required for typing?)
+My observations:
+1. Types are noting but symbols (class names).
+2. The typing environment is lean: it is set up by the rule method type checking (`M OK in C`) and comprised of the formals of a method, plus the variable *this*. The environment for field and method type lookup is implicit (declarations are read from the program, which is also implicit; see above).
 
-The typing rules
+### Translation of the Typing Rules to Prolog
+
+The `type` predicate implementing the type judgements has four arguments:
+- E, the typing environment, which is a list of terms `variable(X, C)`;
+- a pattern for the syntactic category to be typed; @Ralf%CHECKME: where does the term "syntactic category" fit in all of the above?
+- C, the type represented by a class name; and
+- P, the program, which is required for lookups of names via `fields` and `mtype` (implicit in TAPL, which is why it comes last even though it is strictly an input).
+ 
+Note that the names of variables largely follow those used in TAPL; a plural-s replaces for overline.
+ 
+ %CHECKME consider rewriting predicates using operators '|-', ':', and '<:'
+
+#### T-Var
 
 ```prolog
-% T-Var
 type(E, varaccess(X), C, _) :-
     memberchk(variable(C, X), E), !.
 ```
 
-I somehow lost track of how E gets filled!
+a (deterministic) lookup of the type of a variable as used by a variable access %CHECKME: Cut only for testing?
+
+#### T-Field
 
 ```prolog
-% T-Field
-type(E, faccess(T0, Fi), Ci, P) :-
-    type(E, T0, C0, P),
-    fields(C0, P, Fs),
-    memberchk(field(Ci, Fi), Fs).
+type(E, faccess(T_0, F_i), C_i, P) :-
+    type(E, T_0, C_0, P),
+    fields(C_0, P, Fs),
+    memberchk(field(C_i, F_i), Fs).
+```
+
+Note how the original rule operates on a pairs of lists ($~C~$ $~f~$), where the Prolog rule operates on a list of pairs (`[field(C_i, f_i)]`). In a more faithful reconstruction of the original rule (using pairs of lists), an explicit index variable `I` would be required (as in the above rule E-ProjNew, which implements extraction from a pair of lists). Maybe the translation to Prolog could be made more homogenous by using pairs of lists everywhere; however, this would need some working on the grammar, especially the implementation of `repeating`.@Ralf%CHECKME: Should I do this? 
 
 % T-Invk
 type(E, minvoc(T0, M, Ts), C, P) :-
@@ -497,6 +514,8 @@ ok(P) :-
 Please vote: Should I try to introduce operators like '|-' and use ':' to make the Prolog rules resemble the inference rules of TAPL more closely?
 
 Please vote: Should I introduce additional auxiliary functions to implement metavariable binding in the inference rules (e.g., use something like value_of_field_i(...) rather than nth0(...), nth0(...) in E-ProjNew)?
+
+Please vote: Should I try to rewrite type relations using operators '|-', ':', and '<:'?
 
 @Ralf: Your experience with supporting type safety arguments by analyzing the above rules from within Prolog would be greatly appreciated!
 
