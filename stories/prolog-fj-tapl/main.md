@@ -368,7 +368,7 @@ step(minvoc(V_0, M, Ts), minvoc(V_0, M, Tps), P) :-
     eval(T_i, Tp_i, P).
 ```
 
-The [select](http://www.swi-prolog.org/pldoc/man?predicate=select/4) predicate replaces the first occurrence of `T_i` in `Ts` with `Tp_i`, yielding `Tps`. The condition `\+ is_val(T_i)` makes sure (via backtracking into `select`) that all preceeding arguments are values, as requested by the rule. The cut is required to make the choice of `T_i` deterministic; selection of `T_i` will succeed because the case that all arguments are values is caught by E-InvkNew.
+The [select](http://www.swi-prolog.org/pldoc/man?predicate=select/4) predicate replaces the first occurrence of `T_i` in `Ts` with `Tp_i`, yielding `Tps`. The condition `\+ is_val(T_i)` makes sure (via backtracking into `select`) that all preceeding arguments are values, as requested by the original rule. The cut is required to make the choice of `T_i` deterministic; selection of a `T_i` will succeed because the case that all arguments are values is caught by E-InvkNew.
 
 #### E-New-Arg
 
