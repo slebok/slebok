@@ -307,7 +307,9 @@ where `is_val(T)` calls [`phrase(v(T), _)`](http://www.swi-prolog.org/pldoc/doc_
 
 The cut is inserted to satisfy the testing framework; it eliminates choicepoints. However, all choicepoints should eventually lead to failure. %CHECKME which is why the cuts should be removed, so that the latter can be shown by testing.
 
-The evaluation rules themselves are implemented as follows. Note that all cuts have been inserted only to remove vain choicepoints.
+The evaluation rules themselves are implemented as follows.  Note that the syntactic forms (@Ralf%CHECKME: better term?) of the original rules have been replaced by terms coding the types of the corresponding nodes of the (abstract) syntax tree. @Ralf%CHECKME: If possible, should I try to retain the original syntactic form? The generality of such a venture would depend on all syntactic forms always be representable in Prolog syntax. I am kind of scared by the problems this might cause.
+
+Note that all cuts have been inserted only to remove vain choicepoints.
 
 #### E-ProjNew
 
@@ -404,8 +406,11 @@ The typing rules of FJ are given in TAPL, Fig. 19-4:
 They make use of the auxiliary definitions provided by Fig. 19-2 (see above).
 
 My observations:
+0. The interpretation of metavariables as logic variables is mandatory.
 1. Types are noting but symbols (class names).
 2. The typing environment is lean: it is set up by the rule method type checking (`M OK in C`) and comprised of the formals of a method, plus the variable *this*. The environment for field and method type lookup is implicit (declarations are read from the program, which is also implicit; see above).
+
+Note that the so-called stupid cast is elsewhere also known as a cross cast. It makes perfect sense in Java with interfaces (where expressions may be type cast from one interface to a sibling interface).
 
 ### Translation of the Typing Rules to Prolog
 
@@ -437,60 +442,94 @@ type(E, faccess(T_0, F_i), C_i, P) :-
     memberchk(field(C_i, F_i), Fs).
 ```
 
-Note how the original rule operates on a pairs of lists ($~C~$ $~f~$), where the Prolog rule operates on a list of pairs (`[field(C_i, f_i)]`). In a more faithful reconstruction of the original rule (using pairs of lists), an explicit index variable `I` would be required (as in the above rule E-ProjNew, which implements extraction from a pair of lists). Maybe the translation to Prolog could be made more homogenous by using pairs of lists everywhere; however, this would need some working on the grammar, especially the implementation of `repeating`.@Ralf%CHECKME: Should I do this? 
+Note how the original rule operates on a pairs of lists ($~C~$ $~f~$), where the Prolog rule operates on a list of pairs (`[field(C_i, F_i)]`). In a more faithful reconstruction of the original rule (using pairs of lists), an explicit index variable `I` would be required (as in the above rule E-ProjNew, which implements extraction from a pair of lists). Maybe the translation to Prolog could be made more homogenous by using pairs of lists everywhere; however, this would need some working on the grammar, especially the implementation of `repeating` (or perhaps a reimplementation of fields suffices!). @Ralf%CHECKME: Should I do this? 
 
-% T-Invk
-type(E, minvoc(T0, M, Ts), C, P) :-
-    type(E, T0, C0, P),
-    mtype(M, C0, P, (Ds -> C)), %TBD: move P to end
+#### T-Invk
+
+```prolog
+type(E, minvoc(T_0, M, Ts), C, P) :-
+    type(E, T_0, C_0, P),
+    mtype(M, C_0, P, (Ds -> C)), %TBD: move P to end
     type(E, Ts, Cs, P),
     subtype(Cs, Ds, P).
+```
+straightforward translation
 
-% T-New
+#### T-New
+
+```prolog
 type(E, new(C, Ts), C, P) :-
     fields(C, P, Fs),
     findall(D, member(field(D, _), Fs), Ds),
     type(E, Ts, Cs, P),
     subtype(Cs, Ds, P).
+```
 
-% T-UCast
-type(E, cast(C, T0), C, P) :-
-    type(E, T0, D, P),
+straightforward, exept for the extraction of `Ds`, a list of types, from `Fs`, a list of pairs `[field(D, _)]` (see above)
+
+##### T-UCast
+
+```prolog
+type(E, cast(C, T_0), C, P) :-
+    type(E, T_0, D, P),
     subtype(D, C, P), !.
+```
 
-% T-DCast
-type(E, cast(C, T0), C, P) :-
-    type(E, T0, D, P),
+straightforward
+
+#### T-DCast
+```prolog
+type(E, cast(C, T_0), C, P) :-
+    type(E, T_0, D, P),
     subtype(C, D, P),
     C \= D, !.
+```
 
-% T-SCast
-type(E, cast(C, T0), C, P) :-
-    % C \<: D and D \<: C follow from above cuts
-    type(E, T0, D, P),
+straightforward %CHECKME: why cut?
+
+#### T-SCast
+
+```prolog
+type(E, cast(C, T_0), C, P) :-
+    % C \<: D and D \<: C follow from above cuts @Ralf%CHECKME: Should I strive for cutless rules?
+    type(E, T_0, D, P),
     writeln("cross cast from ~w to ~w!", [D, C]).
+```
 
-% typing a list of terms (implicit in TAPL)
+straightforward; warning is printed on console
+
+#### Typing a List of Terms
+```prolog
 type(_, [], [], _).
 type(E, [T|Ts], [C|Cs], P) :-
     type(E, T, C, P),
     type(E, Ts, Cs, P).
+```
 
-% Method Typing
-ok(method(C0, M, Xs, T0), C, P) :-
-    findall(Ci, member(field(Ci, _), Xs), Cs),
-    type([variable(C, this)|Xs], T0, E0, P),
-    subtype(E0, C0, P),
-    P = program(CL), memberchk(class(C, D, _, _, _), CL),
-    override(M, D, (Cs -> C0), P).
+This is implicit in TAPL.
+
+#### Method Typing
+
+```prolog
+ok(method(C_0, M, Xs, T_0), C, P) :-
+    findall(C_i, member(field(C_i, _), Xs), Cs),
+    type([variable(C, this)|Xs], T_0, E_0, P),
+    subtype(E_0, C_0, P),
+    P = program(CLs), memberchk(class(C, D, _, _, _), CLs),
+    override(M, D, (Cs -> C_0), P).
 
 % swap arguments to enable lifting over lists of methods using maplist
 ok4all(C, P, M) :- ok(M, C, P).
+```
 
-% Class Typing
+It finally gets ugly. `findall` extracts the list $~C~$ from the list of formals of the method (a list of pairs), needed for the auxilliary predicate `override`. The typing environment required for typing the method body `T_0` in the next line is again a list of pairs. `memberchk(class(C, D, _, _, _), CLs)` extracts the superclass of $C$ from the program. %CHECKME: How is the superclass of Object determined?; `override` implements the corresponding auxilliary function of Fig. 19-2.
+
+#### Class Typing
+
+```prolog
 ok(class(C, D, Fs, K, Ms), P) :-
     C \= D, \+ subtype(D, C, P), % anti-symmetry; not in TAPL, Fig. 19-4
-    findall(init(F, F), member(field(_, F), Fs), Is), % TBD: init(F, F) corresponds to?
+    findall(init(F, F), member(field(_, F), Fs), Is),
     K = constructor(C, Xs, Ss, Is),
     findall(field(Cx, Nx), member(variable(Cx, Nx), Xs), GFs),
     findall(field(_, S), member(S ,Ss), Gs), % type of S not checked???
@@ -500,12 +539,27 @@ ok(class(C, D, Fs, K, Ms), P) :-
 
 % swap arguments to enable lifting over lists of classes using maplist
 ok4all(P, C) :- ok(C, P).
+```
 
-% Program Typing
+The first line adds some necessary well-typedness checks not made explicit in TAPL's Fig. 19-4. The second line constructs the initializations `Is` expected in the body of the constructor of the class, in the original rule given by $this.~f~=~f~$ (which uses a pair of lists or, rather, the same list twice; note how $this.$ and $=$ serve as indicators of the syntactic category, replaced by terms in the Prolog translation). `init(F, F)` expresses that the init expressions of the constructor of a class use identical names for fields and formals; this condition, which is a naming convention of FJ rather than a type constraint, will be enforced only in the next line, where it is unified with the init expressions found in the actual constructor. (Note that it cannot be enforced by the syntax specification, since its metavariable are strictly not logic variables.) 
+
+The next `findall` creates `GFs`, the list of all fields that should be inherited and declared by class `C`, given the formals `Xs` of the constructor of the class. The `findall` after that assembles the list of fields that, given the super invocation, should be inherited from the superclass. The append predicate makes sure that the fields assigned by the super invocation (`Gs`) and those declared by the class (`Fs`) are indeed those handled by the constructor, while invocation of `fields` on the superclass `D` makes sure that the parameters used in the super invocation correspond to the fields (inherited and declared) of `D`.
+
+%CHECKME: see missing type check for S in the code above.
+
+#### Program Typing
+
+```prolog
 ok(P) :-
     P = program(Cs),
     maplist(ok4all(P), Cs).
 ```
+
+This rule is implicit in TAPL, Fig. 19-4.
+
+### Summary
+
+While the term typing rules are mostly straightforward to translate to Prolog, the necessary pattern matching in *Method typing* and *Class typing* reflects the distance from the chosen term encoding of the abstract syntax tree in Prolog to the use of (or reference to) concrete syntax present in the original rules. I am not sure how this could be improved by chosing a different AST encoding in Prolog, and what its consequences in other places are. @Ralf?
 
 # ToDos
 
