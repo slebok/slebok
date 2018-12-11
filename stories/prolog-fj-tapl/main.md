@@ -36,7 +36,7 @@ Note that the grammar uses $@nonterminals@nonterminal symbol$, or *metavariables
 Here is a number of findings:
 
 1. The overline notation replaces for the $@Kleene star@Kleene_closure$ found in other grammar specification languages, subject to conventions that, were they not detailed in the accompanying text, would need to be reconstructed from a more precise syntax specification of FJ. That is, the grammar as is can only be interpreted using extra knowledge, and therefore is insufficient to drive a standard $@parser generator@$.
-2. In line with metavariables taking the place of nonterminaly, multiple occurrences of the same metavariable in the same rule may expand to different strings. For instance, the two occurrences of *C* in "`class C extends C`" may expand to (and represent) different class names. This means that the metavariables of the syntax can strictly not be equated with the logic variables of Prolog.
+2. In line with metavariables taking the place of nonterminals, multiple occurrences of the same metavariable in the same rule may expand to different strings, or phrases. For instance, the two occurrences of *C* in "`class C extends C`" may expand to (and represent) different class names. This means that the metavariables of the syntax can strictly not be equated with the logic variables of Prolog.
 3. Member access makes the grammar for terms $@left recursive@left recursion$; removal of left recursion needs to take into account the $@left associativity@$ of member access.
 4. The term sublanguage does not introduce parentheses, which are required for member access on cast expressions (as used as an example in TAPL).
 5. Fig. 19-1 really specifies two grammars, one for programs (including terms) and one for values. The language of values is a sublanguage of the language of terms in the sense that all values are also terms syntactically.
@@ -283,11 +283,16 @@ The evaluation rules adhere to a small-step style, meaning that they are repeate
 
 Again, there are some observations to be made:
 
-1. Unlike for the syntax specification, multiple occurrences of the same metavariable in the same rule represent the same (meta)term (note that this holds for metavariables representing identifiers and nonterminals proper alike). @Ralf%CHECKME: other word for metaterm? Note that "term" is ambiguous here, since TAPL uses it for expressions. It follows that in Figure 19-2, all metavariables correspond directly to logic variables.
-2. The metavariables denoted by *$~t~$* etc. are implicitly indexed with indices ranging from 1 to *n*; the use of the same index *i* means that metavariables are selected from the same position of the corresponding sequences. Note that this presupposes that the sequences are of the same length, which may, but need not be, guaranteed by the syntax rules of FJ (it is only guaranteed where two sequences are accepted by the grammar as a list of pairs; e.g.: *$~C~$* *$~x~$*, which is accepted as `[variable(C, X)]`).
-3. The rules and their order specify the evaluation order of subterms. For instance, for a term *t* = *t*_0.*m*(*t*_1, *t*_2), the evaluation order of the subterms *t*_0 through *t*_2 is from left to right. 
+0. Matavariables now stand for subtrees of the program's (abstract) syntax tree.
+1. Unlike for the syntax specification, multiple occurrences of the same metavariable in the same rule represent the same subtree (note that this holds for metavariables representing identifiers and nonterminals proper alike). It follows that in Figure 19-2, all metavariables correspond directly to logic variables.
+0. Unambiguousness (or determinism) of rule selection depends on values ($v$) not being terms ($t$).
+2. The metavariables denoted by *$~t~$* @Vadim%CHECKME: When to use *$$*, when just $$? etc. are implicitly indexed with indices ranging from 1 to *n*; the use of the same index *i* means that metavariables are selected from the same position of the corresponding sequences. Note that this presupposes that the sequences are of the same length, which may, but need not be, guaranteed by the syntax rules of FJ (it is only guaranteed where two sequences are accepted by the grammar as a list of pairs; e.g.: *$~C~$* *$~x~$*, which is accepted as `[variable(C, X)]`).
+3. The success of evaluation either depends on the order in which the rules are visited and selected for application, or on the use of backtracking. For instance, the evaluation of $new C(new D()).f$ gets stuck if the matching rule E-Field is applied; it does not if E-ProjNew (which also matches and comes first) is applied instead (first or via backtracking). Determinisim of rule selection assumes a "select first match" policy.
+4. The rules and their order specify the evaluation order of subterms. For instance, for a term *t* = *t*_0.*m*(*t*_1, *t*_2), the evaluation order of the subterms *t*_0 through *t*_2 is from left to right. @Vadim%CHECKME:$t_0$?
 
-## Translation of Evaluation Rules to Prolog
+### Translation of Evaluation Rules to Prolog
+
+#### Evaluation Loop
 
 The evaluation loop (implicit in TAPL) is implemented by the Prolog predicate
 
@@ -300,10 +305,13 @@ eval(T, V, P) :-
 
 where `is_val(T)` calls [`phrase(v(T), _)`](http://www.swi-prolog.org/pldoc/doc_for?object=phrase/2) either directly or lifts it over the members of `T` if `T` is a list, to check that the term `T` represents a value (@Ralf%CHECKME: Do we not have a metatyping problem here? Is T not *either* a term *or* a value?). The third argument `P` of `eval` holds the program in whose context the term `T` is evaluated to the value `V`.  Note that the evaluation loop terminates successfully when the input term has been reduced to a value, and fails when it arrives at a term that, although it is not a value, cannot be reduced further.
 
-The evaluation rules themselves are implemented as follows.
+The cut is inserted to satisfy the testing framework; it eliminates choicepoints. However, all choicepoints should eventually lead to failure. %CHECKME which is why the cuts should be removed, so that the latter can be shown by testing.
+
+The evaluation rules themselves are implemented as follows. Note that all cuts have been inserted only to remove vain choicepoints.
+
+#### E-ProjNew
 
 ```prolog
-% E-ProjNew
 step(faccess(new(C, Vs), F_i), V_i, P) :-
     is_val(Vs), !,
     fields(C, P, Fs),
@@ -313,47 +321,77 @@ step(faccess(new(C, Vs), F_i), V_i, P) :-
 
 Here, the head of the rule makes sure that it can only be applied to field accesses on constructor invocations, while the first subgoal makes sure that the argument to the constructor invocation, `Vs`, is indeed a list of values, which is another precondition to rule application. The repeated invocation of [`nth1`](http://www.swi-prolog.org/pldoc/man?predicate=nth1/3) selects from `Vs`, the list of values passed to the constructor of `C`, the one assigned to the field named `F_i` (where correspondence is via position `I`). `fields` is the auxiliary function defined in TAPL Fig. 19-2 (see above); note that it depends of the program `P` (which is always implicit in TAPL).
 
+#### E-InvkNew
+
 ```prolog
-% E-InvkNew
 step(minvoc(new(C, Vs), M, Us), V, P) :-
     is_val(Vs), is_val(Us), !,
     mbody(M, C, P, (Xs, T_0)),
     substitute([this|Xs], [new(C, Vs)|Us], T_0, V).
 ```
 
-Here,  `mbody` is the auxiliary function defined in TAPL Fig. 19-2 and `substitute` is another auxiliary predicate.
+Like above. Here,  `mbody` is the auxiliary function defined in TAPL Fig. 19-2 and `substitute` implements substitution.
+
+#### E-CastNew
 
 ```prolog
-% E-CastNew
 step(cast(D, new(C, Vs)), new(C, Vs), P) :-
     is_val(Vs), !,
     subtype(C, D, P).
+```
 
-% E-Field
+#### E-Field
+
+```prolog
 step(faccess(T_0, F), faccess(Tp_0, F), P) :-
     \+ is_val(T_0), !,
     eval(T_0, Tp_0, P).
-    
-% E-Invk-Recv
+```
+
+The negative condition `\+ is_val(T_0)` removes the dependence on evaluation order. %CHECKME could be omitted then? If so, omit?
+
+#### E-Invk-Recv
+
+```prolog
 step(minvoc(T_0, M, Ts), minvoc(Tp_0, M, Ts), P) :-
     \+ is_val(T_0), !,
     eval(T_0, Tp_0, P).
+```
+%CHECKME: removing negative condition causes infinite recursion!
 
-% E-Invk-Arg
+#### E-Invk-Arg
+
+```prolog
 step(minvoc(V_0, M, Ts), minvoc(V_0, M, Tps), P) :-
     is_val(V_0), !, % for is_val(Ts), E-Invk-New applies
     select(T_i, Ts, Tp_i, Tps), \+ is_val(T_i), !, % will succeed; see above
     eval(T_i, Tp_i, P).
+```
 
-% E-New-Arg
+The [select](http://www.swi-prolog.org/pldoc/man?predicate=select/4) predicate replaces the first occurrence of `T_i` in `Ts` with `Tp_i`, yielding `Tps`. The condition `\+ is_val(T_i)` makes sure (via backtracking into `select`) that all preceeding arguments are values, as requested by the rule. The cut is required to make the choice of `T_i` deterministic; selection of `T_i` will succeed because the case that all arguments are values is caught by E-InvkNew.
+
+#### E-New-Arg
+
+```prolog
 step(new(C, Ts), new(C, Tps), P) :-
     select(T_i, Ts, Tp_i, Tps), \+ is_val(T_i), !, % all ground Ts caught by E-InvkNew
     eval(T_i, Tp_i, P).
+```
 
-% E-Cast
+like above
+
+#### E-Cast
+
+```prolog
 step(cast(C, T_0), cast(C, Tp_0), P) :-
     eval(T_0, Tp_0, P).
 ```
+
+trivial
+
+### Summary
+
+The translation of the evaluation rules to Prolog is mostly trivial, especially given that the original evaluation procedure assumes an SLD-like semantics. The helper predicates make some of the implicitness in the original notation explicit.
 
 ## Typing
 
