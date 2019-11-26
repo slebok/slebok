@@ -3,6 +3,7 @@ CSS is ../www/babycobol.css
 logo is ../www/babycobol.png
 
 source CLIST is IBM SA32-0978-00, z/OS TSO/E CLISTs Version 2 Release 1, 1988–2013
+source REXX is IBM SA32-0982-00, z/OS TSO/E REXX User's Guide Version 2 Release 1, 1988–2013
 
 statement CLIST.ATTN became SIGNAL
 summary: define a handler for an attention interrupt
@@ -93,4 +94,93 @@ summary: display text on the terminal without advancing a cursor to the next lin
 
 statement CLIST.EXEC became CALL
 summary: call another program
+
+statement REXX.ADDRESS became ALTER
+summary: change the destination of commands
+
+statement REXX.ARG
+summary: syntactic sugar for PARSE UPPER ARG
+
+statement REXX.CALL became CALL
+summary: call a built-in or external function
+
+statement REXX.CALL_ON became SIGNAL
+summary: change an error handler
+
+statement REXX.CALL_OFF became SIGNAL_OFF
+summary: cancel an established error handler
+
+statement REXX.DO became LOOP
+summary: execute a group of instructions repeatedly
+
+statement REXX.DROP
+summary: unassign a named variable
+
+statement REXX.EXIT became STOP
+summary: terminate a program
+
+statement REXX.IF became IF
+summary: branch conditionally within a program
+
+statement REXX.INTERPRET
+summary: execute an expression as code
+
+// continue from a loop
+statement REXX.ITERATE
+summary: go into the next iteration of the innermost or named DO loop
+
+// break
+statement REXX.LEAVE
+summary: terminate the innermost or named DO loop
+
+statement REXX.NOP became NEXT_SENTENCE
+summary: do nothing
+
+statement REXX.NUMERIC
+summary: specify numeric conventions: significant digits, notation format, etc
+
+statement REXX.OPTIONS
+summary: change DBCS strings treatment
+
+statement REXX.PARSE
+summary: parsing in a broad sense
+
+statement REXX.PROCEDURE
+summary: protect variables by making them local (otherwise all are global)
+
+statement REXX.PULL became ACCEPT
+summary: syntactic sugar for PARSE UPPER PULL
+
+statement REXX.PUSH
+summary: LIFO output
+
+statement REXX.QUEUE
+summary: FIFO output
+
+statement REXX.RETURN became STOP
+summary: terminates a procedure or the program if no procedure is active
+
+statement REXX.SAY became DISPLAY
+summary: display a line on the terminal
+
+statement REXX.SELECT became EVALUATE
+summary: branch to multiple locations based on several conditions
+
+statement REXX.SIGNAL became GO_TO
+summary: branch unconditionally within a program
+
+statement REXX.SIGNAL_ON became SIGNAL
+summary: define a handler for a specific condition
+
+statement REXX.SIGNAL_OFF became SIGNAL_OFF
+summary: cancel an established error handler
+
+statement REXX.TRACE
+summary: perform debugging actions
+
+statement REXX.UPPER
+summary: makes contents of a variable uppercase
+
+statement REXX.PARSE_SOURCE
+summary: read files and access other sources
 
