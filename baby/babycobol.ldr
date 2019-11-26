@@ -1,0 +1,96 @@
+this is BabyCOBOL
+CSS is ../www/babycobol.css
+logo is ../www/babycobol.png
+
+source CLIST is IBM SA32-0978-00, z/OS TSO/E CLISTs Version 2 Release 1, 1988–2013
+
+statement CLIST.ATTN became SIGNAL
+summary: define a handler for an attention interrupt
+
+statement CLIST.CLOSFILE
+summary: close a previously opened QSAM file
+
+statement CLIST.CONTROL
+summary: define processing options
+
+statement CLIST.DATA
+summary: statements for TSO/E to execute
+
+statement CLIST.DATA_PROMPT
+summary: respond to prompts by TSO/E commands
+
+statement CLIST.DO became LOOP
+summary: structural execution of a sequence of commands
+
+statement CLIST.END became END
+summary: end DO, SELECT or a procedure
+
+statement CLIST.ERROR became SIGNAL
+summary: check for non-zero return codes of other commands
+
+statement CLIST.EXIT became STOP
+summary: terminate the program
+
+statement CLIST.GETFILE
+summary: read a record from a QSAM file
+
+statement CLIST.GLOBAL
+summary: share values between nested programs
+
+statement CLIST.NGLOBAL
+summary: share values between procedures within a program
+
+statement CLIST.GOTO became GO_TO
+summary: branch unconditionally within a program
+
+statement CLIST.IF became IF
+summary: branch conditionally within a program
+
+statement CLIST.LISTDSI
+summary: get information about a dataset
+
+statement CLIST.OPENFILE
+summary: open a QSAM file for input and output
+
+statement CLIST.PROC became SECTION
+summary: define a procedure
+
+statement CLIST.PUTFILE
+summary: write a record to a QSAM file
+
+statement CLIST.READ became ACCEPT
+summary: read user input and store it in variables
+
+statement CLIST.READDVAL
+summary: read a &SYSDVAL control variable
+
+statement CLIST.RETURN
+summary: return from an error handler or a procedure
+
+statement CLIST.SELECT became EVALUATE
+summary: branch to multiple locations based on several conditions
+
+statement CLIST.SET became MOVE
+summary: assign a value to a variable
+
+statement CLIST.SYSCALL became PERFORM
+summary: call a local procedure
+
+statement CLIST.SYSREF
+summary: define which caller's data can a procedure access
+
+statement CLIST.TERMIN
+summary: temporary pass control to the terminal user
+
+statement CLIST.TERMING
+summary: temporary pass control to the terminal user from a nested program
+
+statement CLIST.WRITE became DISPLAY
+summary: display text on the terminal
+
+statement CLIST.WRITENR became DISPLAY
+summary: display text on the terminal without advancing a cursor to the next line
+
+statement CLIST.EXEC became CALL
+summary: call another program
+
