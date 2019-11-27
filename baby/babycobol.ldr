@@ -5,6 +5,9 @@ logo is ../www/babycobol.png
 source CLIST is IBM SA32-0978-00, z/OS TSO/E CLISTs Version 2 Release 1, 1988–2013
 source REXX is IBM SA32-0982-00, z/OS TSO/E REXX User's Guide Version 2 Release 1, 1988–2013
 
+  ////  // //  ///      //   ////    //  //  ////   //   ///   ////  /// 
+ ///   /////  ////    ////  ///     //////  ///   ////  ////  ///   ////
+////  // //  ///      //   //      //  //  ////  ////  ///   ////  // //
 statement CLIST.ATTN became SIGNAL
 summary: define a handler for an attention interrupt
 
@@ -95,6 +98,9 @@ summary: display text on the terminal without advancing a cursor to the next lin
 statement CLIST.EXEC became CALL
 summary: call another program
 
+  ////  // //  ///      //   ////    ////  //    //  ////  //////
+ ///   /////  ////    ////  ///     //    //    //  ////    //
+////  // //  ///      //   //      ////  ////  //  ////    //
 statement REXX.ADDRESS became ALTER
 summary: change the destination of commands
 
@@ -184,3 +190,58 @@ summary: makes contents of a variable uppercase
 statement REXX.PARSE_SOURCE
 summary: read files and access other sources
 
+  ////  // //  ///      //   ////    ///    ////  ////  ////
+ ///   /////  ////    ////  ///     ////   ///    //    //
+////  // //  ///      //   //      // //  ////  ////  ////
+statement BabyCOBOL.ACCEPT
+summary: read user input and store it in variables
+
+statement BabyCOBOL.ADD
+summary: add two or more values together
+
+statement BabyCOBOL.ALTER
+summary: change the target of a GO TO statement
+
+statement BabyCOBOL.COPY
+summary: insert contents from a different file
+
+statement BabyCOBOL.DISPLAY
+summary: display text on the terminal
+
+statement BabyCOBOL.DIVIDE
+summary: divide a numeric value by other numbers
+
+statement BabyCOBOL.EVALUATE
+summary: branch to multiple locations based on several conditions
+
+statement BabyCOBOL.GO_TO
+summary: branch unconditionally within a program
+
+statement BabyCOBOL.IF
+summary: branch conditionally within a program
+
+statement BabyCOBOL.LOOP
+summary: structural execution of a sequence of commands
+
+statement BabyCOBOL.MOVE
+summary: partial structural assignment
+
+statement BabyCOBOL.MULTIPLY
+summary: multiply two or more numeric values
+
+statement BabyCOBOL.NEXT_SENTENCE
+summary: branch unconditionally to the beginning of the next sentence
+
+statement BabyCOBOL.PERFORM
+summary: call a paragraph or section within the program
+
+statement BabyCOBOL.SIGNAL
+summary: specify an error handler
+
+statement BabyCOBOL.STOP
+summary: terminate the program
+
+statement BabyCOBOL.SUBTRACT
+summary: subtract one or more numeric values from another value
+
+// TODO: other things like HIGH-VALUES
