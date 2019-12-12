@@ -4,6 +4,9 @@ logo is ../www/babycobol.png
 
 source CLIST is IBM SA32-0978-00, z/OS TSO/E CLISTs Version 2 Release 1, 1988–2013
 source REXX is IBM SA32-0982-00, z/OS TSO/E REXX User's Guide Version 2 Release 1, 1988–2013
+source FORTRAN is The FORTRAN Automatic Coding System for the IBM 704 EDPM, October 15, 1956
+source COBOL is IBM SC23-8528-01, Enterprise COBOL for z/OS Language Reference Version 4 Release 2, 1991–2009
+source RPG is IBM SC09-2508-09, IBM i Version 7.2, Programming IBM Rational Development Studio for i ILE RPG Reference, 1994–2013
 
   ////  // //  ///      //   ////    //  //  ////   //   ///   ////  /// 
  ///   /////  ////    ////  ///     //////  ///   ////  ////  ///   ////
@@ -24,7 +27,7 @@ statement CLIST.DATA_PROMPT
 summary: respond to prompts by TSO/E commands
 
 statement CLIST.DO became LOOP
-summary: structural execution of a sequence of commands
+summary: execute a sequence of commands repeatedly
 
 statement CLIST.END became END
 summary: end DO, SELECT or a procedure
@@ -193,6 +196,428 @@ summary: read files and access other sources
   ////  // //  ///      //   ////    ///    ////  ////  ////
  ///   /////  ////    ////  ///     ////   ///    //    //
 ////  // //  ///      //   //      // //  ////  ////  ////
+statement COBOL.ACCEPT became ACCEPT
+summary: accept user data as the new value of an identifier
+
+statement COBOL.ADD became ADD
+summary: sum two or more numeric operands
+
+statement COBOL.ALTER became ALTER
+summary: change the transfer point of an existing GO TO statement
+
+statement COBOL.CALL
+summary: transfer control from one program to another
+
+statement COBOL.CANCEL
+summary: clear the state of a called subprogram
+
+statement COBOL.CLOSE
+summary: revoke access to a file or volume
+
+statement COBOL.COMPUTE
+summary: assign a variable with a result of a computation of an expression
+
+statement COBOL.CONTINUE became NEXT_SENTENCE
+summary: do nothing
+
+statement COBOL.DELETE
+summary: remove a record from a file or statements from the program under compilation
+
+statement COBOL.DISPLAY became DISPLAY
+summary: print contents of data fields on the display
+
+statement COBOL.DIVIDE became DIVIDE
+summary: divide one numeric operand into others
+
+statement COBOL.ENTRY
+summary: specify a different entry point for a program
+
+statement COBOL.EVALUATE became EVALUATE
+summary: shorthand notation for a series of nested IF statements
+
+statement COBOL.EXIT became NEXT_SENTENCE
+summary: do nothing
+
+statement COBOL.EXIT_METHOD
+summary: terminate the execution of a method
+
+statement COBOL.EXIT_PROGRAM became STOP
+summary: terminate the execution of a subprogram
+
+statement COBOL.GOBACK became STOP
+summary: act like an EXIT PROGRAM or like a STOP RUN
+
+statement COBOL.GO_TO became GO_TO
+summary: branch unconditionally to another section or paragraph
+
+statement COBOL.IF became IF
+summary: branch conditionally within a program
+
+statement COBOL.INITIALIZE
+summary: assign default values to data fields
+
+statement COBOL.INSPECT
+summary: count or convert characters in a string
+
+statement COBOL.INVOKE
+summary: create object instances and call methods
+
+statement COBOL.MERGE
+summary: combine two or more files
+
+statement COBOL.MOVE became MOVE
+summary: transfer data from one storage area to another
+
+statement COBOL.MULTIPLY became MULTIPLY
+summary: multiply numeric values
+
+statement COBOL.OPEN
+summary: initiates file processing
+
+statement COBOL.PERFORM_(in-line) became LOOP
+summary: execute a list of statements repeatedly
+
+statement COBOL.PERFORM_(out-of-line) became PERFORM
+summary: call a local procedure
+
+statement COBOL.READ
+summary: read the next record from an opened file
+
+statement COBOL.RELEASE
+summary: prepare data for sorting
+
+statement COBOL.RETURN
+summary: transfer sorted or merged records to the output
+
+statement COBOL.REWRITE
+summary: replace an existing record in a file
+
+statement COBOL.SEARCH
+summary: search a table for an element satisfying the given condition
+
+statement COBOL.SET
+summary: perform specific assignments
+
+statement COBOL.SORT
+summary: sort records from one or more files
+
+statement COBOL.START
+summary: adjust the cursor position in a file
+
+statement COBOL.STOP_RUN became STOP
+summary: terminate the program
+
+statement COBOL.STRING became DISPLAY
+summary: format and concatenate strings
+
+statement COBOL.SUBTRACT became SUBTRACT
+summary: subtract one or more numeric values from another value
+
+statement COBOL.UNSTRING
+summary: split data over several data fields
+
+statement COBOL.WRITE
+summary: add a record to a file or another output
+
+statement COBOL.XML
+summary: convert data to or from XML
+
+statement COBOL.BASIS
+summary: a directive to provide a program to compile
+
+statement COBOL.CBL
+summary: a directive to specify compilation options
+
+statement COBOL.PROCESS
+summary: a directive to specify compilation options
+
+statement COBOL.*CONTROL
+summary: a directive to select what is being printed during compilation
+
+statement COBOL.*CBL
+summary: a directive to select what is being printed during compilation
+
+statement COBOL.COPY became COPY
+summary: a directive to include another file
+
+statement COBOL.EJECT
+summary: a directive to use a new page when printing the listing
+
+statement COBOL.ENTER
+summary: a directive to support compilation of programs written in other languages than COBOL
+
+statement COBOL.INSERT
+summary: a directive to add source code lines to the basis program
+
+statement COBOL.READY_TRACE
+summary: a directive to activate the debugging mode
+
+statement COBOL.RESET_TRACE
+summary: a directive to reset the debugging mode
+
+statement COBOL.REPLACE became COPY
+summary: a directive to switch ongoing replacements on or off
+
+statement COBOL.SERVICE
+summary: directives inserted by CICS
+
+statement COBOL.SKIP
+summary: a directive to add blank source code lines to the listing
+
+statement COBOL.TITLE
+summary: a directive to specify a page title to print the listing
+
+statement COBOL.USE became SIGNAL
+summary: a directive to activate debugging or exception handling
+
+  ////  // //  ///      //   ////    ////  /////  ////  /////  //
+ ///   /////  ////    ////  ///     //    // //  ////  // //  //
+////  // //  ///      //   //      ////  /////  ////  /////  ////
+
+statement FORTRAN.GO_TO became GO_TO
+summary: branch unconditionally within a program (unconditional, assigned, computed)
+
+statement FORTRAN.IF became IF
+summary: branch conditionally within a program, if the value is less than, equal to, or greater than zero
+
+statement FORTRAN.SENSE_LIGHT
+summary: switch sense lights on the 704 console on or off
+
+statement FORTRAN.PAUSE
+summary: temporary terminate the program
+
+statement FORTRAN.STOP became STOP
+summary: definitively terminate the program
+
+statement FORTRAN.DO became LOOP
+summary: execute a statement repeatedly
+
+statement FORTRAN.CONTINUE became NEXT_SENTENCE
+summary: do nothing
+
+statement FORTRAN.FORMAT became DISPLAY
+summary: prepare data for printing
+
+statement FORTRAN.READ became ACCEPT
+summary: accepts data from input cards, tape or drum
+
+statement FORTRAN.PUNCH
+summary: punch cards
+
+statement FORTRAN.PRINT became DISPLAY
+summary: display data according to the given format
+
+statement FORTRAN.WRITE
+summary: write data to a tape or a drum
+
+statement FORTRAN.END_FILE
+summary: write an end of file marker on tape
+
+statement FORTRAN.REWIND
+summary: rewind a tape unit
+
+statement FORTRAN.BACKSPACE
+summary: make the tape step back one record
+
+statement FORTRAN.DIMENSION
+summary: provide data sizes for memory allocation
+
+statement FORTRAN.EQUIVALENCE
+summary: define which data structures are allowed to reuse each others' memory
+
+statement FORTRAN.FREQUENCY
+summary: provide an estimation of how often which lines will be executed
+
+statement FORTRAN.ASSIGN became ALTER
+summary: change the target of an assigned GO TO statement
+
+statement FORTRAN.CALL became PERFORM
+summary: invoke a subroutine
+
+statement FORTRAN.RETURN became STOP
+summary: terminate a subprogram and return control to the calling program unit
+
+  ////  // //  ///      //   ////    ////  /////  ///  //////  ///    //   /// //
+ ///   /////  ////    ////  ///     ///   // //  ////   //    ////  ////  //////
+////  // //  ///      //   //      //    /////  // //  //    // // ////  // ///
+
+statement RPG.ACQ
+summary: acquire a program device
+statement RPG.ADD became ADD
+summary: add two numbers together
+statement RPG.ADDDUR
+summary: add duration to a date/time/timestamp
+statement RPG.ALLOC
+summary: allocate storage in the heap
+statement RPG.AND
+summary: combine two conditions with a conjunction
+statement RPG.BEGSR
+summary: begin a subrouting
+statement RPG.BITOFF
+summary: assign some bits to zeroes
+statement RPG.BITON
+summary: assign some bits to ones
+statement RPG.CAB became IF
+summary: branch conditionally within a program
+statement RPG.CALL
+summary: transfer control to another program
+statement RPG.CALLB
+summary: transfer control to a bound procedure
+statement RPG.CALLP
+summary: transfer control to a prototyped procedure or program
+statement RPG.CAS became PERFORM
+summary: conditionally invoke subroutine
+statement RPG.CAT
+summary: concatenate two strings
+statement RPG.CHAIN
+summary: fetch a record from a file
+statement RPG.CHECK
+summary: verify that a string contains only allowed characters
+statement RPG.CHECKR
+summary: verify that a string contains only allowed characters, in reverse
+statement RPG.CLEAR
+summary: assign default values to a structure
+statement RPG.CLOSE
+summary: close one or more files or devices and disconnects them
+statement RPG.COMMIT
+summary: commit to scheduled changes
+statement RPG.COMP
+summary: compare two values and set appropriate indicators
+statement RPG.DATA-INTO became ACCEPT
+summary: parse a document into a variable
+statement RPG.DEALLOC
+summary: free one allocation of heap storage
+// TODO: DEFINE = DATA DIVISION?
+statement RPG.DEFINE
+summary: define a data field
+statement RPG.DELETE
+summary: delete a record from a database file
+statement RPG.DIV became DIVIDE
+summary: divide a number by another number
+statement RPG.DO became LOOP
+summary: execute a group of operations several times
+statement RPG.DOU became LOOP
+summary: execute a group of operations until a condition is met
+statement RPG.DOW became LOOP
+summary: execute a group of operations while a condition holds
+statement RPG.DSPLY became DISPLAY
+summary: display a message
+statement RPG.DUMP
+summary: provide a full dump of the executed module
+statement RPG.ELSE became IF
+summary: the optional part of an IF or IFxx operator
+statement RPG.ELSEIF became IF
+summary: a combination of ELSE and IF
+statement RPG.END became END
+summary: a family of operations ending a CASxx, DO, DOU, DOUxx, DOW, DOWxx, FOR, IF, IFxx or SELECT operation
+statement RPG.EVAL
+summary: evaluate an expression
+statement RPG.EVALR
+summary: evaluate an expression and place is right-adjusted into the result
+statement RPG.EVAL-CORR became MOVE
+summary: evaluate an expression and assign corresponding subfields
+statement RPG.EXCEPT
+summary: write one or more records during detail calculations or total calculations
+statement RPG.EXFMT
+summary: a combination of WRITE and READ
+statement RPG.EXSR became PERFORM
+summary: invoke a local subroutine
+statement RPG.EXTRCT
+summary: extract date or time details from a timestamp
+statement RPG.FEOD
+summary: signal the forced end of data
+statement RPG.FOR became LOOP
+summary: iterate over a group of operations
+statement RPG.FORCE
+summary: select from which file will the next read happen
+statement RPG.GOTO became GO_TO
+summary: branch unconditionally within a program
+statement RPG.IF
+summary: TBW
+statement RPG.IN
+summary: TBW
+statement RPG.ITER
+summary: TBW
+statement RPG.LEAVE
+summary: TBW
+statement RPG.LEAVESR
+summary: TBW
+statement RPG.LOOKUP
+summary: search for an element in an array or table
+statement RPG.MONITOR
+summary: TBW
+statement RPG.MOVEA became MOVE
+summary: move data between arrays
+statement RPG.MVR became DIVIDE
+summary: calculate a reminder of a division
+statement RPG.MULT became MULTIPLY
+summary: multiply two numbers
+statement RPG.NEXT
+summary: TBW
+statement RPG.ON-ERROR
+summary: TBW
+statement RPG.ON-EXIT
+summary: TBW
+statement RPG.OPEN
+summary: TBW
+statement RPG.OTHER
+summary: TBW
+statement RPG.OUT
+summary: TBW
+statement RPG.POST
+summary: TBW
+statement RPG.READ
+summary: TBW
+statement RPG.READC
+summary: TBW
+statement RPG.READE
+summary: TBW
+statement RPG.READP
+summary: TBW
+statement RPG.READPE
+summary: TBW
+statement RPG.REL
+summary: TBW
+statement RPG.RESET
+summary: TBW
+statement RPG.RETURN
+summary: TBW
+statement RPG.ROLBK
+summary: TBW
+statement RPG.SELECT
+summary: TBW
+statement RPG.SETGT
+summary: TBW
+statement RPG.SETLL
+summary: TBW
+statement RPG.SORTA
+summary: TBW
+statement RPG.SQRT
+summary: calculate square root of expression
+statement RPG.SUB became SUBTRACT
+summary: subtract one number from another number
+statement RPG.TEST
+summary: TBW
+statement RPG.UNLOCK
+summary: TBW
+statement RPG.UPDATE
+summary: TBW
+statement RPG.WHEN
+summary: TBW
+statement RPG.WRITE
+summary: TBW
+statement RPG.XML-INTO
+summary: TBW
+statement RPG.XML-SAX
+summary: TBW
+statement RPG.Z-ADD became ADD
+summary: add a number to a field of zeroes
+statement RPG.Z-SUB became SUBTRACT
+summary: subtract a number from a field of zeroes
+
+  ////  // //  ///      //   ////    ///    ////  ////
+ ///   /////  ////    ////  ///     ////   ////  // _
+////  // //  ///      //   //      // //  //    ////
 statement BabyCOBOL.ACCEPT
 summary: read user input and store it in variables
 syntax: [17:] >> - "ACCEPT" - - Identifier - ^7 - ><
