@@ -113,7 +113,7 @@ summary: call a built-in or external function
 statement REXX.CALL_ON became SIGNAL
 summary: change an error handler
 
-statement REXX.CALL_OFF became SIGNAL_OFF
+statement REXX.CALL_OFF became SIGNAL
 summary: cancel an established error handler
 
 statement REXX.DO became LOOP
@@ -178,7 +178,7 @@ summary: branch unconditionally within a program
 statement REXX.SIGNAL_ON became SIGNAL
 summary: define a handler for a specific condition
 
-statement REXX.SIGNAL_OFF became SIGNAL_OFF
+statement REXX.SIGNAL_OFF became SIGNAL
 summary: cancel an established error handler
 
 statement REXX.TRACE
@@ -195,53 +195,71 @@ summary: read files and access other sources
 ////  // //  ///      //   //      // //  ////  ////  ////
 statement BabyCOBOL.ACCEPT
 summary: read user input and store it in variables
+syntax: [17:] >> - "ACCEPT" - - Identifier - ^7 - ><
 
 statement BabyCOBOL.ADD
 summary: add two or more values together
+syntax: [33:] >> - "ADD" - - Atomic - ^5 - "TO" - Atomic - #1 -12 >< &1 \ "GIVING" - Identifier /
 
 statement BabyCOBOL.ALTER
 summary: change the target of a GO TO statement
+syntax: [32.] >> - "ALTER" - ProcedureName - "TO" "PROCEED" "TO" - ProcedureName - ><
 
 statement BabyCOBOL.COPY
 summary: insert contents from a different file
+syntax: [37\] >> - "COPY" - FileName - #1 -24 >< &1 \ "REPLACING" - #2 -15 / &2 \2 - Literal - "BY" - Literal - ^13 /2
 
 statement BabyCOBOL.DISPLAY
 summary: display text on the terminal
+syntax: [40:] >> - "DISPLAY" -2 Atomic - "DELIMITED_BY" - #2 - "SIZE" -3 #3 &2 \ "SPACE" / &3 ^18 - #4 -12 >< &4 \ "WITH_NO_ADVANCING" /
 
 statement BabyCOBOL.DIVIDE
 summary: divide a numeric value by other numbers
+syntax: [50:] >> - "DIVIDE" - Atomic - "INTO" - - Atomic - ^5 - #1 -12 #2 -15 >< &1 \ "GIVING" - Identifier / &2 \ "REMAINDER" - Identifier /
 
 statement BabyCOBOL.EVALUATE
 summary: branch to multiple locations based on several conditions
+syntax: [41\] >> - "EVALUATE" - AnyExpression - #1 -20 "END" - >< &1 \2 "WHEN" - #2 -2 Atomic - ^5 -3 Sentence - ^6 /2 &2 \ - "OTHER" - /
 
 statement BabyCOBOL.GO_TO
 summary: branch unconditionally within a program
+syntax: [17.] >> - "GO_TO" - ProcedureName - ><
+// todo: the CC paper also included GO TO ... OR ...
 
 statement BabyCOBOL.IF
 summary: branch conditionally within a program
+syntax: [47,] >> - "IF" - BooleanExpression - "THEN" -2 Statement - ^7 - #1 -13 #2 -6 >< &1 \2 "ELSE" -2 Statement - ^7 /2 &2 \ "END" /
 
 statement BabyCOBOL.LOOP
 summary: structural execution of a sequence of commands
+syntax: [55⇓] >> - "LOOP" - #0 -44 "END" - >< &0 \2 - #1 - "VARYING" - #2 -8 #3 -9 #4 -8 #5 -8 - ^41 /2 &2 \ Identifier / &3 \ "FROM" - Atomic / &4 \ "TO" - Atomic / &5 \ "BY" - Atomic / &1 \3 "WHILE" - BooleanExpression -25 &1 \4 "UNTIL" - BooleanExpression -25 &1 \5 Statement -32 /5
 
 statement BabyCOBOL.MOVE
 summary: partial structural assignment
+syntax: [26\] >> - "MOVE" - #1 - Atomic -5 "TO" -2 Identifier - ^7 - >< &1 \ "HIGH-VALUES" - &1 \2 "LOW-VALUES" -2 &1 \3 "SPACES" -3 /3
 
 statement BabyCOBOL.MULTIPLY
 summary: multiply two or more numeric values
+syntax: [33:] >> - "MULTIPLY" - Atomic - "BY" -2 Atomic - ^5 - #1 -12 >< &1 \ "GIVING" - Identifier /
 
 statement BabyCOBOL.NEXT_SENTENCE
 summary: branch unconditionally to the beginning of the next sentence
+syntax: [13.] >> - "NEXT_SENTENCE" - ><
 
 statement BabyCOBOL.PERFORM
 summary: call a paragraph or section within the program
+syntax: [42.] >> - "PERFORM" - ProcedureName - #1 -15 #2 -10 >< &1 \ "THROUGH" - ProcedureName / &2 \ Atomic - "TIMES" /
 
 statement BabyCOBOL.SIGNAL
 summary: specify an error handler
+syntax: [24:] >> - "SIGNAL" - #1 - ProcedureName -2 "ON_ERROR" - >< &1 \ "OFF" -5 /
 
 statement BabyCOBOL.STOP
 summary: terminate the program
+syntax: [7.] >> - "STOP" - ><
 
 statement BabyCOBOL.SUBTRACT
 summary: subtract one or more numeric values from another value
+syntax: [34:] >> - "SUBTRACT" -2 Atomic - ^5 - "FROM" - Atomic - #1 -12 >< &1 \ "GIVING" - Identifier /
 
 // TODO: other things like HIGH-VALUES
