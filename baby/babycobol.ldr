@@ -533,83 +533,130 @@ summary: select from which file will the next read happen
 statement RPG.GOTO became GO_TO
 summary: branch unconditionally within a program
 statement RPG.IF
-summary: TBW
+summary: conditionally execute a series of operations
 statement RPG.IN
-summary: TBW
+summary: retrieve a data area
 statement RPG.ITER
-summary: TBW
+summary: forces an outer loop to proceed to the next iteration
+statement RPG.KFLD
+summary: designate a field as a part of a search argument
+statement RPG.KLIST
+summary: create a named search argument from a list of fields
 statement RPG.LEAVE
-summary: TBW
+summary: terminate an outer loop prematurely
 statement RPG.LEAVESR
-summary: TBW
+summary: exit a subroutine
 statement RPG.LOOKUP
 summary: search for an element in an array or table
-statement RPG.MONITOR
-summary: TBW
+statement RPG.MxxZO
+summary: move zone portions of characters
+statement RPG.MONITOR became SIGNAL
+summary: perform error handling based on the status code
+statement RPG.MOVE became MOVE
+summary: move character data
 statement RPG.MOVEA became MOVE
 summary: move data between arrays
-statement RPG.MVR became DIVIDE
-summary: calculate a reminder of a division
+statement RPG.MOVEL became MOVE
+summary: move character data starting from the leftmost one
 statement RPG.MULT became MULTIPLY
 summary: multiply two numbers
+statement RPG.MVR became DIVIDE
+summary: calculate a reminder of a division
 statement RPG.NEXT
-summary: TBW
-statement RPG.ON-ERROR
-summary: TBW
+summary: schedules the next READ/CHAIN/... operation to read from a particular source
+// NB: same as BabyCOBOL OCCURS
+statement RPG.OCCUR
+summary: specify the occurrence of a data structure
+statement RPG.ON-ERROR became SIGNAL
+summary: specify which error conditions trigger the handler
 statement RPG.ON-EXIT
-summary: TBW
+summary: specify code that is run every time a subroutine is terminated
 statement RPG.OPEN
-summary: TBW
-statement RPG.OTHER
-summary: TBW
+summary: open a file for processing
+statement RPG.OR
+summary: combine two conditions with a disjunction
+statement RPG.OTHER became EVALUATE
+summary: define a branch in a SELECT group to be executed if no WHEN condition matches
 statement RPG.OUT
-summary: TBW
+summary: update a data area
+statement RPG.PARM
+summary: define parameters in a parameter list
+statement RPG.PLIST
+summary: identify a parameter list for a CALL/CALLB
 statement RPG.POST
-summary: TBW
+summary: fill in a file information data structure (INFDS)
 statement RPG.READ
-summary: TBW
+summary: read a record from a full procedural file
 statement RPG.READC
-summary: TBW
+summary: read the next changed record from a WORKSTN file
 statement RPG.READE
-summary: TBW
+summary: read a record from a full procedural file with a known key or EOF otherwise
 statement RPG.READP
-summary: TBW
+summary: read a prior record from a full procedural file
 statement RPG.READPE
-summary: TBW
+summary: read the next prior sequential record from a full procedural file with a known key or EOF otherwise
+statement RPG.REALLOC
+summary: reallocate storage with new length
 statement RPG.REL
-summary: TBW
+summary: release the block on a program device
 statement RPG.RESET
-summary: TBW
+summary: restore a variable to its default value
 statement RPG.RETURN
-summary: TBW
+summary: return to caller
 statement RPG.ROLBK
-summary: TBW
-statement RPG.SELECT
-summary: TBW
+summary: roll back — eliminates all changes to all files since the last rollback or commit
+statement RPG.SCAN
+summary: find a substring in a string
+statement RPG.SELECT became EVALUATE
+summary: branch to multiple locations based on several conditions
 statement RPG.SETGT
-summary: TBW
+summary: position a file at a record with a key greater than the given value
 statement RPG.SETLL
-summary: TBW
+summary: position a file at a record with a key greater or equal than the given value
+statement RPG.SETOFF
+summary: set off all indicators from positions 71–76
+statement RPG.SETON
+summary: set on all indicators from positions 71–76
+statement RPG.SHTDN
+summary: check whether the system operator has requested a system shutdown
 statement RPG.SORTA
-summary: TBW
+summary: sort an array
 statement RPG.SQRT
 summary: calculate square root of expression
 statement RPG.SUB became SUBTRACT
 summary: subtract one number from another number
+statement RPG.SUBDUR
+summary: subtract duration from a date/time/timestamp
+statement RPG.SUBST
+summary: carve a substring from a string
+statement RPG.TAG
+summary: define a label to use with GO TO
 statement RPG.TEST
-summary: TBW
+summary: test the validity of a date/time/timestamp
+statement RPG.TESTB
+summary: compare operands bitwise
+statement RPG.TESTN
+summary: find zoned decimal digits within a string
+statement RPG.TESTZ
+summary: test the zone of the leftmost character in a string
+statement RPG.TIME
+summary: retrieve date/time/timestamp
 statement RPG.UNLOCK
-summary: TBW
+summary: release record locks and unlock a data area
 statement RPG.UPDATE
-summary: TBW
-statement RPG.WHEN
-summary: TBW
+summary: modify an existing record
+statement RPG.WHEN became EVALUATE
+summary: define a branch within a SELECT block
 statement RPG.WRITE
-summary: TBW
+summary: create new records
+statement RPG.XFOOT
+summary: sum all elements of an array
+statement RPG.XLATE
+summary: translate a string according to a given mapping
 statement RPG.XML-INTO
-summary: TBW
+summary: parse an XML document into a variable
 statement RPG.XML-SAX
-summary: TBW
+summary: initiate reactive parsing of an XML document into a variable
 statement RPG.Z-ADD became ADD
 summary: add a number to a field of zeroes
 statement RPG.Z-SUB became SUBTRACT
