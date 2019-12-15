@@ -198,175 +198,120 @@ summary: read files and access other sources
 ////  // //  ///      //   //      // //  ////  ////  ////
 statement COBOL.ACCEPT became ACCEPT
 summary: accept user data as the new value of an identifier
-
 statement COBOL.ADD became ADD
 summary: sum two or more numeric operands
-
 statement COBOL.ALTER became ALTER
 summary: change the transfer point of an existing GO TO statement
-
 statement COBOL.CALL
 summary: transfer control from one program to another
-
 statement COBOL.CANCEL
 summary: clear the state of a called subprogram
-
 statement COBOL.CLOSE
 summary: revoke access to a file or volume
-
 statement COBOL.COMPUTE
 summary: assign a variable with a result of a computation of an expression
-
 statement COBOL.CONTINUE became NEXT_SENTENCE
 summary: do nothing
-
 statement COBOL.DELETE
 summary: remove a record from a file or statements from the program under compilation
-
 statement COBOL.DISPLAY became DISPLAY
 summary: print contents of data fields on the display
-
 statement COBOL.DIVIDE became DIVIDE
 summary: divide one numeric operand into others
-
 statement COBOL.ENTRY
 summary: specify a different entry point for a program
-
 statement COBOL.EVALUATE became EVALUATE
 summary: shorthand notation for a series of nested IF statements
-
 statement COBOL.EXIT became NEXT_SENTENCE
 summary: do nothing
-
 statement COBOL.EXIT_METHOD
 summary: terminate the execution of a method
-
 statement COBOL.EXIT_PROGRAM became STOP
 summary: terminate the execution of a subprogram
-
 statement COBOL.GOBACK became STOP
 summary: act like an EXIT PROGRAM or like a STOP RUN
-
 statement COBOL.GO_TO became GO_TO
 summary: branch unconditionally to another section or paragraph
-
 statement COBOL.IF became IF
 summary: branch conditionally within a program
-
 statement COBOL.INITIALIZE
 summary: assign default values to data fields
-
 statement COBOL.INSPECT
 summary: count or convert characters in a string
-
 statement COBOL.INVOKE
 summary: create object instances and call methods
-
 statement COBOL.MERGE
 summary: combine two or more files
-
 statement COBOL.MOVE became MOVE
 summary: transfer data from one storage area to another
-
 statement COBOL.MULTIPLY became MULTIPLY
 summary: multiply numeric values
-
+statement COBOL.NEXT_SENTENCE became NEXT_SENTENCE
+summary: a special clause of the IF statement to transfer control to the statement after the next dot
 statement COBOL.OPEN
 summary: initiates file processing
-
 statement COBOL.PERFORM_(in-line) became LOOP
 summary: execute a list of statements repeatedly
-
 statement COBOL.PERFORM_(out-of-line) became PERFORM
 summary: call a local procedure
-
 statement COBOL.READ
 summary: read the next record from an opened file
-
 statement COBOL.RELEASE
 summary: prepare data for sorting
-
 statement COBOL.RETURN
 summary: transfer sorted or merged records to the output
-
 statement COBOL.REWRITE
 summary: replace an existing record in a file
-
 statement COBOL.SEARCH
 summary: search a table for an element satisfying the given condition
-
 statement COBOL.SET
 summary: perform specific assignments
-
 statement COBOL.SORT
 summary: sort records from one or more files
-
 statement COBOL.START
 summary: adjust the cursor position in a file
-
 statement COBOL.STOP_RUN became STOP
 summary: terminate the program
-
 statement COBOL.STRING became DISPLAY
 summary: format and concatenate strings
-
 statement COBOL.SUBTRACT became SUBTRACT
 summary: subtract one or more numeric values from another value
-
 statement COBOL.UNSTRING
 summary: split data over several data fields
-
 statement COBOL.WRITE
 summary: add a record to a file or another output
-
 statement COBOL.XML
 summary: convert data to or from XML
-
 statement COBOL.BASIS
 summary: a directive to provide a program to compile
-
 statement COBOL.CBL
 summary: a directive to specify compilation options
-
 statement COBOL.PROCESS
 summary: a directive to specify compilation options
-
 statement COBOL.*CONTROL
 summary: a directive to select what is being printed during compilation
-
 statement COBOL.*CBL
 summary: a directive to select what is being printed during compilation
-
 statement COBOL.COPY became COPY
 summary: a directive to include another file
-
 statement COBOL.EJECT
 summary: a directive to use a new page when printing the listing
-
 statement COBOL.ENTER
 summary: a directive to support compilation of programs written in other languages than COBOL
-
 statement COBOL.INSERT
 summary: a directive to add source code lines to the basis program
-
 statement COBOL.READY_TRACE
 summary: a directive to activate the debugging mode
-
 statement COBOL.RESET_TRACE
 summary: a directive to reset the debugging mode
-
 statement COBOL.REPLACE became COPY
 summary: a directive to switch ongoing replacements on or off
-
 statement COBOL.SERVICE
 summary: directives inserted by CICS
-
 statement COBOL.SKIP
 summary: a directive to add blank source code lines to the listing
-
 statement COBOL.TITLE
 summary: a directive to specify a page title to print the listing
-
 statement COBOL.USE became SIGNAL
 summary: a directive to activate debugging or exception handling
 
@@ -667,71 +612,74 @@ summary: subtract a number from a field of zeroes
 ////  // //  ///      //   //      // //  //    ////
 statement BabyCOBOL.ACCEPT
 summary: read user input and store it in variables
-syntax: [17:] >> - "ACCEPT" - - Identifier - ^7 - ><
+format: [17:] >> - "ACCEPT" - - Identifier - ^7 - ><
 
 statement BabyCOBOL.ADD
 summary: add two or more values together
-syntax: [33:] >> - "ADD" - - Atomic - ^5 - "TO" - Atomic - #1 -12 >< &1 \ "GIVING" - Identifier /
+format: [33:] >> - "ADD" - - Atomic - ^5 - "TO" - Atomic - #1 -12 >< &1 \ "GIVING" - Identifier /
 
 statement BabyCOBOL.ALTER
 summary: change the target of a GO TO statement
-syntax: [32.] >> - "ALTER" - ProcedureName - "TO" "PROCEED" "TO" - ProcedureName - ><
+format: [32.] >> - "ALTER" - ProcedureName - "TO" "PROCEED" "TO" - ProcedureName - ><
 
 statement BabyCOBOL.COPY
 summary: insert contents from a different file
-syntax: [37\] >> - "COPY" - FileName - #1 -24 >< &1 \ "REPLACING" - #2 -15 / &2 \2 - Literal - "BY" - Literal - ^13 /2
+format: [37\] >> - "COPY" - FileName - #1 -24 >< &1 \ "REPLACING" - #2 -15 / &2 \2 - Literal - "BY" - Literal - ^13 /2
 
 statement BabyCOBOL.DISPLAY
 summary: display text on the terminal
-syntax: [40:] >> - "DISPLAY" -2 Atomic - "DELIMITED_BY" - #2 - "SIZE" -3 #3 &2 \ "SPACE" / &3 ^18 - #4 -12 >< &4 \ "WITH_NO_ADVANCING" /
+format: [40:] >> - "DISPLAY" -2 Atomic - "DELIMITED_BY" - #2 - "SIZE" -3 #3 &2 \ "SPACE" / &3 ^18 - #4 -12 >< &4 \ "WITH_NO_ADVANCING" /
 
 statement BabyCOBOL.DIVIDE
 summary: divide a numeric value by other numbers
-syntax: [50:] >> - "DIVIDE" - Atomic - "INTO" - - Atomic - ^5 - #1 -12 #2 -15 >< &1 \ "GIVING" - Identifier / &2 \ "REMAINDER" - Identifier /
+format: [50:] >> - "DIVIDE" - Atomic - "INTO" - - Atomic - ^5 - #1 -12 #2 -15 >< &1 \ "GIVING" - Identifier / &2 \ "REMAINDER" - Identifier /
 
 statement BabyCOBOL.EVALUATE
 summary: branch to multiple locations based on several conditions
-syntax: [41\] >> - "EVALUATE" - AnyExpression - #1 -20 "END" - >< &1 \2 "WHEN" - #2 -2 Atomic - ^5 -3 Sentence - ^6 /2 &2 \ - "OTHER" - /
+format: [41\] >> - "EVALUATE" - AnyExpression - #1 -20 "END" - >< &1 \2 "WHEN" - #2 -2 Atomic - ^5 -3 Sentence - ^6 /2 &2 \ - "OTHER" - /
 
 statement BabyCOBOL.GO_TO
 summary: branch unconditionally within a program
-syntax: [17.] >> - "GO_TO" - ProcedureName - ><
+format: [17.] >> - "GO_TO" - ProcedureName - ><
 // todo: the CC paper also included GO TO ... OR ...
 
 statement BabyCOBOL.IF
 summary: branch conditionally within a program
-syntax: [47,] >> - "IF" - BooleanExpression - "THEN" -2 Statement - ^7 - #1 -13 #2 -6 >< &1 \2 "ELSE" -2 Statement - ^7 /2 &2 \ "END" /
+format: [47,] >> - "IF" - BooleanExpression - "THEN" -2 Statement - ^7 - #1 -13 #2 -6 >< &1 \2 "ELSE" -2 Statement - ^7 /2 &2 \ "END" /
 
 statement BabyCOBOL.LOOP
 summary: structural execution of a sequence of commands
-syntax: [55⇓] >> - "LOOP" - #0 -44 "END" - >< &0 \2 - #1 - "VARYING" - #2 -8 #3 -9 #4 -8 #5 -8 - ^41 /2 &2 \ Identifier / &3 \ "FROM" - Atomic / &4 \ "TO" - Atomic / &5 \ "BY" - Atomic / &1 \3 "WHILE" - BooleanExpression -25 &1 \4 "UNTIL" - BooleanExpression -25 &1 \5 Statement -32 /5
+format: [55⇓] >> - "LOOP" - #0 -44 "END" - >< &0 \2 - #1 - "VARYING" - #2 -8 #3 -9 #4 -8 #5 -8 - ^41 /2 &2 \ Identifier / &3 \ "FROM" - Atomic / &4 \ "TO" - Atomic / &5 \ "BY" - Atomic / &1 \3 "WHILE" - BooleanExpression -25 &1 \4 "UNTIL" - BooleanExpression -25 &1 \5 Statement -32 /5
 
 statement BabyCOBOL.MOVE
 summary: partial structural assignment
-syntax: [26\] >> - "MOVE" - #1 - Atomic -5 "TO" -2 Identifier - ^7 - >< &1 \ "HIGH-VALUES" - &1 \2 "LOW-VALUES" -2 &1 \3 "SPACES" -3 /3
+format: [26\] >> - "MOVE" - #1 - Atomic -5 "TO" -2 Identifier - ^7 - >< &1 \ "HIGH-VALUES" - &1 \2 "LOW-VALUES" -2 &1 \3 "SPACES" -3 /3
 
 statement BabyCOBOL.MULTIPLY
 summary: multiply two or more numeric values
-syntax: [33:] >> - "MULTIPLY" - Atomic - "BY" -2 Atomic - ^5 - #1 -12 >< &1 \ "GIVING" - Identifier /
+format: [33:] >> - "MULTIPLY" - Atomic - "BY" -2 Atomic - ^5 - #1 -12 >< &1 \ "GIVING" - Identifier /
 
 statement BabyCOBOL.NEXT_SENTENCE
 summary: branch unconditionally to the beginning of the next sentence
-syntax: [13.] >> - "NEXT_SENTENCE" - ><
+format: [13.] >> - "NEXT_SENTENCE" - ><
+syntax: The syntax of this statement is very straightforward, and hides only one subtlety: watch out for the dot after it. If there is a dot, as in "<code>NEXT SENTENCE.</code>", then the entire statement becomes meaningless and does nothing, since it is supposed to transfer control to the beginning of the next sentence, and dot ends the current sentence and signals the immediate start of the next one. So, the NEXT SENTENCE statement with a dot just represents and empty statement, called "no operation" elsewhere, while the NEXT SENTENCE without a dot works as defined below. So while in COBOL the NEXT SENTENCE statement can only be used as a special clause inside an IF statement, in BabyCOBOL it can be used anywhere, including facilitating an empty paragraph (which technically cannot be empty, but will exhibit no noticeable behaviour if only contains a dotted NEXT SENTENCE statement), similar to the role EXIT plays in COBOL.
+semantics: The problems of implementing the NEXT SENTENCE statement come from the clash between the hierarchical tree-like structure of the program and its flat textual structure. The official semantics of the NEXT SENTENCE statement is that it: <ul><li>Transfers control to the first statement of the next sentence (after the dot)</li><li>If the transfer takes the execution away from the current context of LOOP, PERFORM, etc, cleans up call stack contents, temporary variables and other local effects of the context being left behind</li></ul> If the AST already incorporates the information about sentences in addition to statements, then implementing the NEXT SENTENCE statement should not be too difficult: we need to prepare a possibly useful target label at the beginning of each sentence, and use it when needed. Due to BabyCOBOL's simplified design, this is the only possible way in the language to essentially GO TO within a paragraph.
+style: NEXT SENTENCE at the beginning of the paragraph can be used to comment out one of more of the immediately following statements, making them dead code without marking each line as an explicit comment.
 
 statement BabyCOBOL.PERFORM
 summary: call a paragraph or section within the program
-syntax: [42.] >> - "PERFORM" - ProcedureName - #1 -15 #2 -10 >< &1 \ "THROUGH" - ProcedureName / &2 \ Atomic - "TIMES" /
+format: [42.] >> - "PERFORM" - ProcedureName - #1 -15 #2 -10 >< &1 \ "THROUGH" - ProcedureName / &2 \ Atomic - "TIMES" /
 
 statement BabyCOBOL.SIGNAL
 summary: specify an error handler
-syntax: [24:] >> - "SIGNAL" - #1 - ProcedureName -2 "ON_ERROR" - >< &1 \ "OFF" -5 /
+format: [24:] >> - "SIGNAL" - #1 - ProcedureName -2 "ON_ERROR" - >< &1 \ "OFF" -5 /
 
 statement BabyCOBOL.STOP
 summary: terminate the program
-syntax: [7.] >> - "STOP" - ><
+format: [7.] >> - "STOP" - ><
 
 statement BabyCOBOL.SUBTRACT
 summary: subtract one or more numeric values from another value
-syntax: [34:] >> - "SUBTRACT" -2 Atomic - ^5 - "FROM" - Atomic - #1 -12 >< &1 \ "GIVING" - Identifier /
+format: [34:] >> - "SUBTRACT" -2 Atomic - ^5 - "FROM" - Atomic - #1 -12 >< &1 \ "GIVING" - Identifier /
 
 // TODO: other things like HIGH-VALUES
