@@ -14,3 +14,6 @@
 * The Art Of Domain-Specific Languages: Let's Hack Our Own Languages! University of Rennes 1; Jean-Marc Jézéquel and Mathieu Acher
    * https://github.com/FAMILIAR-project/HackOurLanguages-SIF
    * Todo Add synopsis
+* Model-Driven Development; King's College London - Steffen Zschaler
+   * Currently no public link available (new module, introduced Spring 2020)
+   * This course provides an introduction to model-driven engineering, focusing primarily on the development and use of domain-specific modelling languages. Topics covered include an economic/engineering motivation for MDSE and DSMLs, introduction to textual DSMLs in Xtext, abstract syntax and metamodelling, model-to-text and model-to-model transformations, graphical DSMLs with Sirius, validation (check rules and type checks with XSemantics).
