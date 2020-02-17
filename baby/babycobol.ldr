@@ -610,13 +610,89 @@ summary: subtract a number from a field of zeroes
   ////  // //  ///      //   ////    ///    ////  ////
  ///   /////  ////    ////  ///     ////   ////  // _
 ////  // //  ///      //   //      // //  //    ////
+
+statement PL/I.CALL became PERFORM
+summary: invoke a local subroutine
+statement PL/I.RETURN
+summary: terminate execution of a subroutine or a function procedure
+statement PL/I.OPTIONS
+summary: annotate a package, procedure, entry or a statement block with metadata
+statement PL/I.PROCEDURE
+summary: define a local callable procedure
+statement PL/I.ALLOCATE
+summary: allocate storage for controlled variables
+statement PL/I.ATTACH
+summary: create a new thread
+statement PL/I.BEGIN
+summary: start a block of statements
+statement PL/I.CLOSE
+summary: dissociate a file from its data set
+statement PL/I.DECLARE
+statement PL/I.DEFINE
+statement PL/I.DEFAULT
+statement PL/I.DELAY
+statement PL/I.DELETE
+statement PL/I.DETACH
+statement PL/I.DISPLAY
+statement PL/I.DO became LOOP
+statement PL/I.END became УТВ
+statement PL/I.ENTRY
+statement PL/I.EXIT
+statement PL/I.FETCH
+statement PL/I.FLUSH
+summary: flush buffers associated with an output file
+statement PL/I.FORMAT
+statement PL/I.FREE
+statement PL/I.GET
+statement PL/I.GO_TO became GO_TO
+statement PL/I.IF became IF
+statement PL/I.%INCLUDE became COPY
+statement PL/I.ITERATE
+statement PL/I.LEAVE
+statement PL/I.%LINE
+statement PL/I.LOCATE
+statement PL/I.%NOPRINT
+statement PL/I.%NOTE
+statement PL/I.; became NEXT_SENTENCE
+statement PL/I.ON
+statement PL/I.OPEN
+summary: associate a file with a data set
+statement PL/I.OTHERWISE became EVALUATE
+statement PL/I.PACKAGE
+statement PL/I.%PAGE
+statement PL/I.%POP
+statement PL/I.%PRINT
+statement PL/I.%PROCESS
+statement PL/I.*PROCESS
+statement PL/I.%PUSH
+statement PL/I.PUT
+statement PL/I.READ
+statement PL/I.RELEASE
+statement PL/I.RESIGNAL
+statement PL/I.REVERT
+statement PL/I.REWRITE
+statement PL/I.SELECT
+statement PL/I.SIGNAL
+statement PL/I.%SKIP
+statement PL/I.STOP
+statement PL/I.WAIT
+statement PL/I.WHEN became EVALUATE
+statement PL/I.WRITE
+statement PL/I.%XINCLUDE
+
+  ////  // //  ///      //   ////    ////  //      //  //
+ ///   /////  ////    ////  ///     ////  //     //   //
+////  // //  ///      //   //      //    ////  //    //
+
 statement BabyCOBOL.ACCEPT
 summary: read user input and store it in variables
 format: [17:] >> - "ACCEPT" - - Identifier - ^7 - ><
+remarks: <ul><li>the input is expected to obey the picture clause definition of the data fields being read</li></ul>
 
 statement BabyCOBOL.ADD
 summary: add two or more values together
 format: [33:] >> - "ADD" - - Atomic - ^5 - "TO" - Atomic - #1 -12 >< &1 \ "GIVING" - Identifier /
+remarks: <ul><li>all three arguments obey the rules of sufficient qualification</li><li>either of the first two arguments can be a literal</li><li>if the second argument is a literal, the third argument is mandatory</li><li>any of the three arguments can be an identifier defined with a numeric picture clause (free from <code>A</code> and <code>X</code>)</li></ul>
 
 statement BabyCOBOL.ALTER
 summary: change the target of a GO TO statement
@@ -624,15 +700,18 @@ format: [32.] >> - "ALTER" - ProcedureName - "TO" "PROCEED" "TO" - ProcedureName
 
 statement BabyCOBOL.COPY
 summary: insert contents from a different file
-format: [37\] >> - "COPY" - FileName - #1 -24 >< &1 \ "REPLACING" - #2 -15 / &2 \2 - Literal - "BY" - Literal - ^13 /2
+format: [37,] >> - "COPY" - FileName - #1 -22 >< &1 \2 "REPLACING" -2 Literal - "BY" - Literal - ^13 /2
+remarks: <ul><li>argument literals are quoted with <code>===</code> on each side, like this: <code>COPY REPLACING ===XXX=== BY ===YYY===</code></li></ul>
 
 statement BabyCOBOL.DISPLAY
 summary: display text on the terminal
 format: [40:] >> - "DISPLAY" -2 Atomic - "DELIMITED_BY" - #2 - "SIZE" -3 #3 &2 \ "SPACE" / &3 ^18 - #4 -12 >< &4 \ "WITH_NO_ADVANCING" /
+remarks: <ul><li><code>WITH NO ADVANCING</code> clause prints the text without appending newline character(s)</li><li>values <code>DELIMITED BY SPACE</code> are printed by converting them to strings and trimming empty spaces from both sides</li><li>values <code>DELIMITED BY SIZE</code> are printed by converting them to strings of fixed size corresponding to their defined (identifiers) or inferred (literals) type</li></ul>
 
 statement BabyCOBOL.DIVIDE
 summary: divide a numeric value by other numbers
 format: [50:] >> - "DIVIDE" - Atomic - "INTO" - - Atomic - ^5 - #1 -12 #2 -15 >< &1 \ "GIVING" - Identifier / &2 \ "REMAINDER" - Identifier /
+remarks: <ul><li>all four arguments obey the rules of sufficient qualification</li><li>either of the first two arguments can be a literal</li><li>if the first argument is a literal, the third argument is mandatory</li><li>any of the four arguments can be an identifier defined with a numeric picture clause (free from <code>A</code> and <code>X</code>)</li></ul>
 
 statement BabyCOBOL.EVALUATE
 summary: branch to multiple locations based on several conditions
@@ -642,10 +721,12 @@ statement BabyCOBOL.GO_TO
 summary: branch unconditionally within a program
 format: [17.] >> - "GO_TO" - ProcedureName - ><
 // todo: the CC paper also included GO TO ... OR ...
+remarks: <ul><li>branching outside an active <code>LOOP</code> terminates its iteration</li><li>branching outside paragraphs being <code>PERFORM</code>ed terminates the performance and forfeits the call place, acting as a redirected return</li><li>the argument can be a field name, possibly being reassigned at runtime with <code>MOVE</code></li></ul>
 
 statement BabyCOBOL.IF
 summary: branch conditionally within a program
 format: [47,] >> - "IF" - BooleanExpression - "THEN" -2 Statement - ^7 - #1 -13 #2 -6 >< &1 \2 "ELSE" -2 Statement - ^7 /2 &2 \ "END" /
+remarks: <ul><li>an <code>END</code>-less <code>IF</code> is terminated at the end of the sentence (by <code>.</code>)</li></ul>
 
 statement BabyCOBOL.LOOP
 summary: structural execution of a sequence of commands
@@ -654,10 +735,12 @@ format: [55⇓] >> - "LOOP" - #0 -44 "END" - >< &0 \2 - #1 - "VARYING" - #2 -8 #
 statement BabyCOBOL.MOVE
 summary: partial structural assignment
 format: [26\] >> - "MOVE" - #1 - Atomic -5 "TO" -2 Identifier - ^7 - >< &1 \ "HIGH-VALUES" - &1 \2 "LOW-VALUES" -2 &1 \3 "SPACES" -3 /3
+remarks: <ul><li>for numeric fields (defined with picture clauses without <code>A</code> nor <code>X</code>), BabyCOBOL's <code>MOVE SPACES</code> behaves like COBOL's <code>MOVE ZEROES</code></li><li>if the first argument is an identifier, BabyCOBOL's <code>MOVE</code> behaves like COBOL's <code>MOVE CORRESPONDING</code></li><li>if the first argument is a figurative value, it can lead to assigning vastly different values to second arguments depending on their individual types</li></ul>
 
 statement BabyCOBOL.MULTIPLY
 summary: multiply two or more numeric values
 format: [33:] >> - "MULTIPLY" - Atomic - "BY" -2 Atomic - ^5 - #1 -12 >< &1 \ "GIVING" - Identifier /
+remarks: <ul><li>all three arguments obey the rules of sufficient qualification</li><li>either of the first two arguments can be a literal</li><li>if the second argument is a literal, the third argument is mandatory</li><li>any of the three arguments can be an identifier defined with a numeric picture clause (free from <code>A</code> and <code>X</code>)</li></ul>
 
 statement BabyCOBOL.NEXT_SENTENCE
 summary: branch unconditionally to the beginning of the next sentence
@@ -681,5 +764,6 @@ format: [7.] >> - "STOP" - ><
 statement BabyCOBOL.SUBTRACT
 summary: subtract one or more numeric values from another value
 format: [34:] >> - "SUBTRACT" -2 Atomic - ^5 - "FROM" - Atomic - #1 -12 >< &1 \ "GIVING" - Identifier /
+remarks: <ul><li>all three arguments obey the rules of sufficient qualification</li><li>either of the first two arguments can be a literal</li><li>if the second argument is a literal, the third argument is mandatory</li><li>any of the three arguments can be an identifier defined with a numeric picture clause (free from <code>A</code> and <code>X</code>)</li></ul>
 
 // TODO: other things like HIGH-VALUES
